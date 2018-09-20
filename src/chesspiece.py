@@ -8,16 +8,25 @@ class PieceType(Enum):
     QUEEN = 3
 
 class Color(Enum):
+    """
+        TODO:
+    """
     WHITE = 0
     BLACK = 1
 
 def index_valid(x, y):
+    """
+        TODO:
+    """
     return x < 8 and x >= 0 and y < 8 and y >= 0
 
 class ChessPiece(ABC):
-    def __init__(self, position, color):
-        self.x = position[0]
-        self.y = position[1]
+    """
+        TODO:
+    """
+    def __init__(self, x, y, color):
+        self.x = x
+        self.y = y
         self.color = color
 
     @abstractmethod
@@ -26,8 +35,11 @@ class ChessPiece(ABC):
 
 
 class Rook(ChessPiece):
-    def __init__(self, position):
-        super().__init__(position)
+    """
+        TODO:
+    """
+    def __init__(self, x, y, color):
+        super().__init__(x, y, color)
 
     def attack_defense(self, grid):
         num_of_attacks = 0
@@ -65,8 +77,11 @@ class Rook(ChessPiece):
                 break
 
 class Bishop(ChessPiece):
-    def __init__(self, position):
-        super().__init__(position)
+    """
+        TODO:
+    """
+    def __init__(self, x, y, color):
+        super().__init__(x, y, color)
 
     def attack_defense(self, grid):
         num_of_attacks = 0
@@ -109,8 +124,11 @@ class Bishop(ChessPiece):
                 break
 
 class Queen(ChessPiece):
-    def __init__(self, position):
-        super().__init__(position)
+    """
+        TODO:
+    """
+    def __init__(self, x, y, color):
+        super().__init__(x, y, color)
 
     def attack_defense(self, grid):
         num_of_attacks = 0
@@ -189,8 +207,11 @@ class Queen(ChessPiece):
                 break
 
 class Knight(ChessPiece):
-    def __init__(self, position):
-        super().__init__(position)
+    """
+        TODO:
+    """
+    def __init__(self, x, y, color):
+        super().__init__(x, y, color)
 
     def attack_defense(self, grid):
         num_of_attacks = 0
