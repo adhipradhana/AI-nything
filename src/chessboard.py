@@ -8,14 +8,6 @@ class ChessBoard:
         """ Initializes a chessboard """
         self.grid = [[None for j in range(8)] for i in range(8)]
         self.list = []
-        self.no_of_black_rook = 0
-        self.no_of_black_bishop = 0
-        self.no_of_black_queen = 0
-        self.no_of_black_knight = 0
-        self.no_of_white_rook = 0
-        self.no_of_white_bishop = 0
-        self.no_of_white_queen = 0
-        self.no_of_white_knight = 0
 
     def __str__(self):
         """ Prints the chessboard trough print() function """
