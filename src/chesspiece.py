@@ -30,7 +30,7 @@ class ChessPiece(ABC):
         self.color = color
 
     @abstractmethod
-    def attack_defense(self, grid):
+    def attack_defense(self, grid, x, y):
         pass
 
 
@@ -40,41 +40,47 @@ class Rook(ChessPiece):
     """
     def __init__(self, x, y, color):
         super().__init__(x, y, color)
+        self.chesspiece_type = PieceType.ROOK
 
-    def attack_defense(self, grid):
+    def attack_defense(self, grid, curr_x=None, curr_y=None):
+        curr_x = curr_x if curr_x is not None else self.x
+        curr_y = curr_y if curr_y is not None else self.y
+
         num_of_attacks = 0
         num_of_defenses = 0
-        for x in range(self.x + 1, 8):
-            if grid[x, self.y] != self.color:
+        for x in range(curr_x + 1, 8):
+            if grid[x, curr_y] != self.color:
                 num_of_attacks += 1
                 break
-            elif grid[x, self.y] == self.color:
+            elif grid[x, curr_y] == self.color:
                 num_of_defenses += 1
                 break
 
-        for x in range(self.x - 1, -1, -1):
-            if grid[x, self.y] != self.color:
+        for x in range(curr_x - 1, -1, -1):
+            if grid[x, curr_y] != self.color:
                 num_of_attacks += 1
                 break
-            elif grid[x, self.y] == self.color:
+            elif grid[x, curr_y] == self.color:
                 num_of_defenses += 1
                 break
 
-        for y in range(self.y + 1, 8):
-            if grid[self.x, y] != self.color:
+        for y in range(curr_y + 1, 8):
+            if grid[curr_x, y] != self.color:
                 num_of_attacks += 1
                 break
-            elif grid[self.x, y] == self.color:
+            elif grid[curr_x, y] == self.color:
                 num_of_defenses += 1
                 break
 
-        for y in range(self.y - 1, -1, -1):
-            if grid[self.x, y] != self.color:
+        for y in range(curr_y - 1, -1, -1):
+            if grid[curr_x, y] != self.color:
                 num_of_attacks += 1
                 break
-            elif grid[self.x, y] == self.color:
+            elif grid[curr_x, y] == self.color:
                 num_of_defenses += 1
                 break
+
+        return (num_of_defenses, num_of_attacks)
 
 class Bishop(ChessPiece):
     """
@@ -82,46 +88,52 @@ class Bishop(ChessPiece):
     """
     def __init__(self, x, y, color):
         super().__init__(x, y, color)
+        self.chesspiece_type = PieceType.BISHOP
 
-    def attack_defense(self, grid):
+    def attack_defense(self, grid, curr_x=None, curr_y=None):
+        curr_x = curr_x if curr_x is not None else self.x
+        curr_y = curr_y if curr_y is not None else self.y
+
         num_of_attacks = 0
         num_of_defenses = 0
 
         # lower left
-        for delta in range(1, (self.x if self.x < self.y else self.y) + 1):
-            if grid[self.x + delta, self.y + delta] != self.color:
+        for delta in range(1, (curr_x if curr_x < curr_y else curr_y) + 1):
+            if grid[curr_x + delta, curr_y + delta] != self.color:
                 num_of_attacks += 1
                 break
-            elif grid[self.x + delta, self.y + delta] == self.color:
+            elif grid[curr_x + delta, curr_y + delta] == self.color:
                 num_of_defenses += 1
                 break
 
         # lower right
-        for delta in range(1, (7 - self.x if 7 - self.x < self.y else self.y) + 1):
-            if grid[self.x + delta, self.y + delta] != self.color:
+        for delta in range(1, (7 - curr_x if 7 - curr_x < curr_y else curr_y) + 1):
+            if grid[curr_x + delta, curr_y + delta] != self.color:
                 num_of_attacks += 1
                 break
-            elif grid[self.x + delta, self.y + delta] == self.color:
+            elif grid[curr_x + delta, curr_y + delta] == self.color:
                 num_of_defenses += 1
                 break
 
         # upper left
-        for delta in range(1, (7 - self.x if 7 - self.x < 7 - self.y else 7 - self.y) + 1):
-            if grid[self.x + delta, self.y - delta] != self.color:
+        for delta in range(1, (7 - curr_x if 7 - curr_x < 7 - curr_y else 7 - curr_y) + 1):
+            if grid[curr_x + delta, curr_y - delta] != self.color:
                 num_of_attacks += 1
                 break
-            elif grid[self.x + delta, self.y - delta] == self.color:
+            elif grid[curr_x + delta, curr_y - delta] == self.color:
                 num_of_defenses += 1
                 break
 
         # upper left
-        for delta in range(1, (self.x if self.x < 7 - self.y else 7 - self.y) + 1):
-            if grid[self.x + delta, self.y - delta] != self.color:
+        for delta in range(1, (curr_x if curr_x < 7 - curr_y else 7 - curr_y) + 1):
+            if grid[curr_x + delta, curr_y - delta] != self.color:
                 num_of_attacks += 1
                 break
-            elif grid[self.x + delta, self.y - delta] == self.color:
+            elif grid[curr_x + delta, curr_y - delta] == self.color:
                 num_of_defenses += 1
                 break
+
+        return (num_of_defenses, num_of_attacks)
 
 class Queen(ChessPiece):
     """
@@ -129,82 +141,88 @@ class Queen(ChessPiece):
     """
     def __init__(self, x, y, color):
         super().__init__(x, y, color)
+        self.chesspiece_type = PieceType.QUEEN
 
-    def attack_defense(self, grid):
+    def attack_defense(self, grid, curr_x=None, curr_y=None):
+        curr_x = curr_x if curr_x is not None else self.x
+        curr_y = curr_y if curr_y is not None else self.y
+
         num_of_attacks = 0
         num_of_defenses = 0
 
         # lower left
-        for delta in range(1, (self.x if self.x < self.y else self.y) + 1):
-            if grid[self.x + delta, self.y + delta] != self.color:
+        for delta in range(1, (curr_x if curr_x < curr_y else curr_y) + 1):
+            if grid[curr_x + delta, curr_y + delta] != self.color:
                 num_of_attacks += 1
                 break
-            elif grid[self.x + delta, self.y + delta] == self.color:
+            elif grid[curr_x + delta, curr_y + delta] == self.color:
                 num_of_defenses += 1
                 break
 
         # lower right
-        for delta in range(1, (7 - self.x if 7 - self.x < self.y else self.y) + 1):
-            if grid[self.x + delta, self.y + delta] != self.color:
+        for delta in range(1, (7 - curr_x if 7 - curr_x < curr_y else curr_y) + 1):
+            if grid[curr_x + delta, curr_y + delta] != self.color:
                 num_of_attacks += 1
                 break
-            elif grid[self.x + delta, self.y + delta] == self.color:
+            elif grid[curr_x + delta, curr_y + delta] == self.color:
                 num_of_defenses += 1
                 break
 
         # upper left
-        for delta in range(1, (7 - self.x if 7 - self.x < 7 - self.y else 7 - self.y) + 1):
-            if grid[self.x + delta, self.y - delta] != self.color:
+        for delta in range(1, (7 - curr_x if 7 - curr_x < 7 - curr_y else 7 - curr_y) + 1):
+            if grid[curr_x + delta, curr_y - delta] != self.color:
                 num_of_attacks += 1
                 break
-            elif grid[self.x + delta, self.y - delta] == self.color:
+            elif grid[curr_x + delta, curr_y - delta] == self.color:
                 num_of_defenses += 1
                 break
 
         # upper left
-        for delta in range(1, (self.x if self.x < 7 - self.y else 7 - self.y) + 1):
-            if grid[self.x + delta, self.y - delta] != self.color:
+        for delta in range(1, (curr_x if curr_x < 7 - curr_y else 7 - curr_y) + 1):
+            if grid[curr_x + delta, curr_y - delta] != self.color:
                 num_of_attacks += 1
                 break
-            elif grid[self.x + delta, self.y - delta] == self.color:
+            elif grid[curr_x + delta, curr_y - delta] == self.color:
                 num_of_defenses += 1
                 break
 
         # right
-        for x in range(self.x + 1, 8):
-            if grid[x, self.y] != self.color:
+        for x in range(curr_x + 1, 8):
+            if grid[x, curr_y] != self.color:
                 num_of_attacks += 1
                 break
-            elif grid[x, self.y] == self.color:
+            elif grid[x, curr_y] == self.color:
                 num_of_defenses += 1
                 break
 
         # left
-        for x in range(self.x - 1, -1, -1):
-            if grid[x, self.y] != self.color:
+        for x in range(curr_x - 1, -1, -1):
+            if grid[x, curr_y] != self.color:
                 num_of_attacks += 1
                 break
-            elif grid[x, self.y] == self.color:
+            elif grid[x, curr_y] == self.color:
                 num_of_defenses += 1
                 break
 
         # up
-        for y in range(self.y + 1, 8):
-            if grid[self.x, y] != self.color:
+        for y in range(curr_y + 1, 8):
+            if grid[curr_x, y] != self.color:
                 num_of_attacks += 1
                 break
-            elif grid[self.x, y] == self.color:
+            elif grid[curr_x, y] == self.color:
                 num_of_defenses += 1
                 break
 
         # down
-        for y in range(self.y - 1, -1, -1):
-            if grid[self.x, y] != self.color:
+        for y in range(curr_y - 1, -1, -1):
+            if grid[curr_x, y] != self.color:
                 num_of_attacks += 1
                 break
-            elif grid[self.x, y] == self.color:
+            elif grid[curr_x, y] == self.color:
                 num_of_defenses += 1
                 break
+
+        return (num_of_defenses, num_of_attacks)
 
 class Knight(ChessPiece):
     """
@@ -212,56 +230,62 @@ class Knight(ChessPiece):
     """
     def __init__(self, x, y, color):
         super().__init__(x, y, color)
+        self.chesspiece_type = PieceType.KNIGHT
 
-    def attack_defense(self, grid):
+    def attack_defense(self, grid, curr_x=None, curr_y=None):
+        curr_x = curr_x if curr_x is not None else self.x
+        curr_y = curr_y if curr_y is not None else self.y
+
         num_of_attacks = 0
         num_of_defenses = 0
-        if index_valid(self.x + 2, self.y + 1):
-            if self.color != grid[self.x + 2][self.y + 1]:
+        if index_valid(curr_x + 2, curr_y + 1):
+            if self.color != grid[curr_x + 2][curr_y + 1]:
                 num_of_attacks += 1
             else:
                 num_of_defenses += 1
 
-        if index_valid(self.x + 2, self.y - 1):
-            if self.color != grid[self.x + 2][self.y - 1]:
+        if index_valid(curr_x + 2, curr_y - 1):
+            if self.color != grid[curr_x + 2][curr_y - 1]:
                 num_of_attacks += 1
             else:
                 num_of_defenses += 1
 
-        if index_valid(self.x - 2, self.y + 1):
-            if self.color != grid[self.x - 2][self.y + 1]:
+        if index_valid(curr_x - 2, curr_y + 1):
+            if self.color != grid[curr_x - 2][curr_y + 1]:
                 num_of_attacks += 1
             else:
                 num_of_defenses += 1
 
-        if index_valid(self.x - 2, self.y - 1):
-            if self.color != grid[self.x - 2][self.y - 1]:
+        if index_valid(curr_x - 2, curr_y - 1):
+            if self.color != grid[curr_x - 2][curr_y - 1]:
                 num_of_attacks += 1
             else:
                 num_of_defenses += 1
 
-        if index_valid(self.x + 1, self.y + 2):
-            if self.color != grid[self.x + 1][self.y + 2]:
+        if index_valid(curr_x + 1, curr_y + 2):
+            if self.color != grid[curr_x + 1][curr_y + 2]:
                 num_of_attacks += 1
             else:
                 num_of_defenses += 1
 
-        if index_valid(self.x + 1, self.y - 2):
-            if self.color != grid[self.x + 1][self.y - 2]:
+        if index_valid(curr_x + 1, curr_y - 2):
+            if self.color != grid[curr_x + 1][curr_y - 2]:
                 num_of_attacks += 1
             else:
                 num_of_defenses += 1
 
-        if index_valid(self.x - 1, self.y + 2):
-            if self.color != grid[self.x - 1][self.y + 2]:
+        if index_valid(curr_x - 1, curr_y + 2):
+            if self.color != grid[curr_x - 1][curr_y + 2]:
                 num_of_attacks += 1
             else:
                 num_of_defenses += 1
 
-        if index_valid(self.x - 1, self.y - 2):
-            if self.color != grid[self.x - 1][self.y - 2]:
+        if index_valid(curr_x - 1, curr_y - 2):
+            if self.color != grid[curr_x - 1][curr_y - 2]:
                 num_of_attacks += 1
             else:
                 num_of_defenses += 1
+
+        return (num_of_defenses, num_of_attacks)
 
 
