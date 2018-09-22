@@ -255,52 +255,60 @@ class Knight(ChessPiece):
         num_of_attacks = 0
         num_of_defenses = 0
         if index_valid(curr_x + 2, curr_y + 1):
-            if self.color != grid[curr_x + 2][curr_y + 1]:
-                num_of_attacks += 1
-            else:
-                num_of_defenses += 1
+            if grid[curr_x + 2][curr_y + 1] != None:
+                if self.color != grid[curr_x + 2][curr_y + 1]:
+                    num_of_attacks += 1
+                else:
+                    num_of_defenses += 1
 
         if index_valid(curr_x + 2, curr_y - 1):
-            if self.color != grid[curr_x + 2][curr_y - 1]:
-                num_of_attacks += 1
-            else:
-                num_of_defenses += 1
+            if grid[curr_x + 2][curr_y - 1] != None:
+                if self.color != grid[curr_x + 2][curr_y - 1]:
+                    num_of_attacks += 1
+                else:
+                    num_of_defenses += 1
 
         if index_valid(curr_x - 2, curr_y + 1):
-            if self.color != grid[curr_x - 2][curr_y + 1]:
-                num_of_attacks += 1
-            else:
-                num_of_defenses += 1
+            if grid[curr_x - 2][curr_y + 1] != None:
+                if self.color != grid[curr_x - 2][curr_y + 1]:
+                    num_of_attacks += 1
+                else:
+                    num_of_defenses += 1
 
         if index_valid(curr_x - 2, curr_y - 1):
-            if self.color != grid[curr_x - 2][curr_y - 1]:
-                num_of_attacks += 1
-            else:
-                num_of_defenses += 1
+            if grid[curr_x - 2][curr_y - 1] != None:
+                if self.color != grid[curr_x - 2][curr_y - 1]:
+                    num_of_attacks += 1
+                else:
+                    num_of_defenses += 1
 
         if index_valid(curr_x + 1, curr_y + 2):
-            if self.color != grid[curr_x + 1][curr_y + 2]:
-                num_of_attacks += 1
-            else:
-                num_of_defenses += 1
+            if grid[curr_x + 1][curr_y + 2] != None:
+                if self.color != grid[curr_x + 1][curr_y + 2]:
+                    num_of_attacks += 1
+                else:
+                    num_of_defenses += 1
 
         if index_valid(curr_x + 1, curr_y - 2):
-            if self.color != grid[curr_x + 1][curr_y - 2]:
-                num_of_attacks += 1
-            else:
-                num_of_defenses += 1
+            if grid[curr_x + 1][curr_y - 2] != None:
+                if self.color != grid[curr_x + 1][curr_y - 2]:
+                    num_of_attacks += 1
+                else:
+                    num_of_defenses += 1
 
         if index_valid(curr_x - 1, curr_y + 2):
-            if self.color != grid[curr_x - 1][curr_y + 2]:
-                num_of_attacks += 1
-            else:
-                num_of_defenses += 1
+            if grid[curr_x - 1][curr_y + 2] != None:
+                if self.color != grid[curr_x - 1][curr_y + 2]:
+                    num_of_attacks += 1
+                else:
+                    num_of_defenses += 1
 
         if index_valid(curr_x - 1, curr_y - 2):
-            if self.color != grid[curr_x - 1][curr_y - 2]:
-                num_of_attacks += 1
-            else:
-                num_of_defenses += 1
+            if grid[curr_x - 1][curr_y - 2] != None:
+                if self.color != grid[curr_x - 1][curr_y - 2]:
+                    num_of_attacks += 1
+                else:
+                    num_of_defenses += 1
 
         return (num_of_defenses, num_of_attacks)
 
