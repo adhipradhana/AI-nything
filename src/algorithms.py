@@ -1,6 +1,8 @@
-import ChessBoard
-from chesspiece import index_valid
-
+from src.chesspiece import index_valid
+import src.chessboard
+import src.chesspiece
+import time
+import random
 
 def hill_climbing(chessboard):
     """ Stochastic Hill Climbing algorithm function for N-ything problem
@@ -25,7 +27,7 @@ def hill_climbing(chessboard):
             new_x = selected_piece.x + inc_x
             new_y = selected_piece.y + inc_y
             if index_valid(new_x,new_y):
-                if chessboard.grid[new_x][new_y] is None::
+                if chessboard.grid[new_x][new_y] is None:
                     valid_neighbour.append([new_x,new_y])
         return valid_neighbour
 
@@ -39,26 +41,31 @@ def hill_climbing(chessboard):
         """
         best_cost = [99999,-1]
         current_cost = chessboard.cost()
+        # print("Debug")
         step = 0
         improve = 0
         start_time = time.time()
 
-        while step < limit && best_cost[0] > 0 :
+        while step < limit and best_cost[0] > 0 :
+            # print("Debug2")
             step += 1
             current_cost = chessboard.cost()
             selected_piece = chessboard.list[random.randint(0, len(chessboard.list) - 1)]
-            neighbour = find_neighbour(selected_piece)
+            neighbour = find_neighbour(chessboard, selected_piece)
             while len(neighbour) > 0:
                 selected_move = neighbour[random.randint(0, len(neighbour) - 1)]
                 neighbour.remove(selected_move)
+                init_x = selected_piece.x
+                init_y = selected_piece.y
+                chessboard.move(selected_piece, *selected_move)
+                next_cost = chessboard.cost()
+                chessboard.move(selected_piece, init_x, init_y)
 
-                next_cost = chessboard.seek_cost(selected_piece,*selected_move)
-                
-                if next_cost[0] < best_cost[0] && next_cost[1] > best_cost[1]:
+                if next_cost[0] < best_cost[0] and next_cost[1] > best_cost[1]:
                     best_cost = next_cost
 
-                if next_cost[0] < current_cost[0] && next_cost[1] > current_cost[1]:
-                    chessboard = chessboard.move(selected_piece,*selected_move)
+                if next_cost[0] < current_cost[0] and next_cost[1] > current_cost[1]:
+                    chessboard.move(selected_piece,*selected_move)
                     current_cost = next_cost
                     improve += 1
                     break
@@ -92,6 +99,7 @@ def hill_climbing(chessboard):
     success = 0
     for i in range(int(trial)):
         chessboard.randomize()
+        # print(chessboard.cost() + " masuk")
         current_result = solve_hill_climbing(chessboard, limit)
         if current_result['best_cost'] == 0:
             success += 1
