@@ -1,6 +1,6 @@
 from random import randint
-from chesspiece import Rook, Bishop, Queen, Knight, Color, PieceType, index_valid
-from chessboard_error import ChessBoardFullError, ChessBoardPositionError
+from .chesspiece import Rook, Bishop, Queen, Knight, Color, PieceType, index_valid
+from .chessboard_error import ChessBoardFullError, ChessBoardPositionError
 
 class ChessBoard:
     """ ChessBoard class """
@@ -15,73 +15,57 @@ class ChessBoard:
 
     def create_rook(self, color):
         """ Creates a new Rook """
-        if self.list.count < 64:
-            new_x = randint(0, 63)
-            new_y = randint(0, 63)
+        if len(self.list) < 64:
+            new_x = randint(0, 7)
+            new_y = randint(0, 7)
             while self.grid[new_x][new_y] is not None:
-                new_x = randint(0, 63)
-                new_y = randint(0, 63)
+                new_x = randint(0, 7)
+                new_y = randint(0, 7)
             r = Rook(new_x, new_y, color)
             self.grid[new_x][new_y] = color
             self.list.append(r)
-            if color == Color.BLACK:
-                self.no_of_black_rook += 1
-            else:
-                self.no_of_white_rook += 1
         else:
             raise ChessBoardFullError("ChessBoard full")
 
     def create_bishop(self, color):
         """ Creates a new Bishop """
-        if self.list.count < 64:
-            new_x = randint(0, 63)
-            new_y = randint(0, 63)
+        if len(self.list) < 64:
+            new_x = randint(0, 7)
+            new_y = randint(0, 7)
             while self.grid[new_x][new_y] is not None:
-                new_x = randint(0, 63)
-                new_y = randint(0, 63)
+                new_x = randint(0, 7)
+                new_y = randint(0, 7)
             b = Bishop(new_x, new_y, color)
             self.grid[new_x][new_y] = color
             self.list.append(b)
-            if color == Color.BLACK:
-                self.no_of_black_bishop += 1
-            else:
-                self.no_of_white_bishop += 1
         else:
             raise ChessBoardFullError("ChessBoard full")
     
     def create_queen(self, color):
         """ Creates a new Queen """
-        if self.list.count < 64:
-            new_x = randint(0, 63)
-            new_y = randint(0, 63)
+        if len(self.list) < 64:
+            new_x = randint(0, 7)
+            new_y = randint(0, 7)
             while self.grid[new_x][new_y] is not None:
-                new_x = randint(0, 63)
-                new_y = randint(0, 63)
+                new_x = randint(0, 7)
+                new_y = randint(0, 7)
             q = Queen(new_x, new_y, color)
             self.grid[new_x][new_y] = color
             self.list.append(q)
-            if color == Color.BLACK:
-                self.no_of_black_queen += 1
-            else:
-                self.no_of_white_queen += 1
         else:
             raise ChessBoardFullError("ChessBoard full")
     
     def create_knight(self, color):
         """ Creates a new Knight """
-        if self.list.count < 64:
-            new_x = randint(0, 63)
-            new_y = randint(0, 63)
+        if len(self.list) < 64:
+            new_x = randint(0, 7)
+            new_y = randint(0, 7)
             while self.grid[new_x][new_y] is not None:
-                new_x = randint(0, 63)
-                new_y = randint(0, 63)
+                new_x = randint(0, 7)
+                new_y = randint(0, 7)
             k = Knight(new_x, new_y, color)
             self.grid[new_x][new_y] = color
             self.list.append(k)
-            if color == Color.BLACK:
-                self.no_of_black_knight += 1
-            else:
-                self.no_of_white_knight += 1
         else:
             raise ChessBoardFullError("ChessBoard full")
 
@@ -89,11 +73,11 @@ class ChessBoard:
         """ Randomizes the position of all Chesspieces """
         self.grid = [[None for j in range(8)] for i in range(8)]
         for chesspiece in self.list:
-            new_x = randint(0, 63)
-            new_y = randint(0, 63)
+            new_x = randint(0, 7)
+            new_y = randint(0, 7)
             while self.grid[new_x][new_y] is not None:
-                new_x = randint(0, 63)
-                new_y = randint(0, 63)
+                new_x = randint(0, 7)
+                new_y = randint(0, 7)
             self.grid[new_x][new_y] = chesspiece.color
             chesspiece.x = new_x
             chesspiece.y = new_y
@@ -108,9 +92,13 @@ class ChessBoard:
             PieceType.KNIGHT: 'K',
         }
         for chesspiece in self.list:
-            temp_grid[chesspiece.x, chesspiece.y] = characterize[chesspiece.chesspiece_type]
+            temp_grid[chesspiece.y][chesspiece.x] = characterize[chesspiece.chesspiece_type]
             if chesspiece.color == Color.BLACK: 
-                temp_grid[chesspiece.x][chesspiece.y] = temp_grid[chesspiece.x][chesspiece.y].lower()
+                temp_grid[chesspiece.y][chesspiece.x] = temp_grid[chesspiece.y][chesspiece.x].lower()
+        print("-"*17)
+        for row in reversed(temp_grid):
+            print("|" + ("|").join(row) + "|")
+            print("-"*17)
 
     def cost(self):
         """
