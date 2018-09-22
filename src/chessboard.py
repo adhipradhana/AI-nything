@@ -1,6 +1,7 @@
 from random import randint
 from .chesspiece import Rook, Bishop, Queen, Knight, Color, PieceType, index_valid
 from .chessboard_error import ChessBoardFullError, ChessBoardPositionError
+from .util import parser
 
 class ChessBoard:
     """ ChessBoard class """
@@ -12,6 +13,22 @@ class ChessBoard:
     def __str__(self):
         """ Prints the chessboard trough print() function """
         self.print()
+
+    def init_map(self, filename):
+        pieces = parser(filename)
+        for piece in pieces:
+            if piece[1] == 'KNIGHT':
+                for i in range(0, int(piece[2])):
+                    self.create_knight(Color[piece[0]])
+            elif piece[1] == 'ROOK':
+                for i in range(0, int(piece[2])):
+                    self.create_rook(Color[piece[0]])
+            elif piece[1] == 'QUEEN':
+                for i in range(0, int(piece[2])):
+                    self.create_queen(Color[piece[0]])
+            elif piece[1] == 'BISHOP':
+                for i in range(0, int(piece[2])):
+                    self.create_bishop(Color[piece[0]])
 
     def create_rook(self, color):
         """ Creates a new Rook """
