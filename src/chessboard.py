@@ -161,9 +161,12 @@ class ChessBoard:
             raises ChessBoardPositionError if position is invalid
         """
         if index_valid(x, y):
+            print(self.grid[x][y])
             if self.grid[x][y] is None:
                 for chesspiece in self.list:
                     if chesspiece == piece:
+                        self.grid[x][y] = chesspiece.color
+                        self.grid[chesspiece.x][chesspiece.y] = None
                         chesspiece.x = x
                         chesspiece.y = y
                         break
