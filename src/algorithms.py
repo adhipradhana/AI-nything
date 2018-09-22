@@ -3,6 +3,7 @@ import src.chessboard
 import src.chesspiece
 import time
 import random
+import copy
 
 def hill_climbing(chessboard):
     """ Random-restart Stochastic Hill Climbing algorithm function for N-ything problem
@@ -22,13 +23,10 @@ def hill_climbing(chessboard):
         :return: list of valid adjacent move
         """
         valid_neighbour = []
-        movement = [ [0,1] , [1,1] , [1,0] , [1,-1] , [0,-1] , [-1,-1] , [-1,0] , [-1,1] ]
-        for inc_x, inc_y in movement:
-            new_x = selected_piece.x + inc_x
-            new_y = selected_piece.y + inc_y
-            if index_valid(new_x,new_y):
-                if chessboard.grid[new_x][new_y] is None:
-                    valid_neighbour.append([new_x,new_y])
+        for x in range(0,8):
+            for y in range(0,8):
+                if chessboard.grid[x][y] is None:
+                    valid_neighbour.append([x,y])
         return valid_neighbour
 
 
@@ -86,21 +84,21 @@ def hill_climbing(chessboard):
         :return: the best result 
         """
         if len(best_result) == 0:
-            return new_result
-        elif best_result['best_cost'][0] > new_result['best_cost'][0]:
-            return new_result
+            return copy.deepcopy(new_result)
+        elif best_result['best_cost'][0] >= new_result['best_cost'][0] and best_result['best_cost'][1] <= new_result['best_cost'][1]:
+            return copy.deepcopy(new_result)
         else:
-            return best_result
+            return copy.deepcopy(best_result)
 
     # main
     print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
     print('\n------------------- RANDOM-RESTART STOCHASTIC HILL CLIMBING ALGORITHM -------------------\n')
     trial = input('input trial amount: ')
     limit = int(input('input step limit: '))
+    print('\n')
     success = 0
     for i in range(int(trial)):
         chessboard.randomize()
-        # print(chessboard.cost() + " masuk")
         current_result = solve_hill_climbing(chessboard, limit)
         if current_result['best_cost'][0] == 0:
             success += 1
@@ -115,7 +113,6 @@ def hill_climbing(chessboard):
     print('Success rate:     {} %'.format(success_rate * 100))
     print('\nBest result:')
     best_result['chessboard'].print()
-    # best_result['chessboard'].print_pieces_location()
     print('  * best cost:    {}'.format(best_result['best_cost']))
     print('  * final cost:   {}'.format(best_result['final_cost']))
     print('  * total step:   {}'.format(best_result['step']))
