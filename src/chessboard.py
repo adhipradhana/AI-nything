@@ -110,7 +110,7 @@ class ChessBoard:
         for chesspiece in self.list:
             no_of_defenses, no_of_attacks = chesspiece.attack_defense(self.grid)
             total_attacks += no_of_attacks
-            total_defenses +- no_of_defenses
+            total_defenses += no_of_defenses
         
         return (total_defenses, total_attacks)
 
@@ -130,7 +130,7 @@ class ChessBoard:
                         no_of_defenses, no_of_attacks = chesspiece.attack_defense(self.grid)
 
                     total_attacks += no_of_attacks
-                    total_defenses +- no_of_defenses
+                    total_defenses += no_of_defenses
                 
                 return (total_defenses, total_attacks)
             else:
