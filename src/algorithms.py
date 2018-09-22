@@ -10,6 +10,7 @@ def hill_climbing(chessboard):
     # I.S : random chessboard
     # F.S : chessboard at global/local maximum
     """
+    best_result = {}
 
     def find_neighbour(chessboard, selected_piece):
         """ function to find valid adjacent move
@@ -88,7 +89,6 @@ def hill_climbing(chessboard):
     # main
     trial = input('input trial amount: ')
     limit = int(input('input step limit: '))
-    best_result = {}
     success = 0
     for i in range(int(trial)):
         chessboard.randomize()
