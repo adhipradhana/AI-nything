@@ -119,3 +119,78 @@ def hill_climbing(chessboard):
     print('  * improvement:  {}'.format(best_result['improve']))
     print('  * elapsed time: {} ms'.format(best_result['time_elapsed'] * 1000))
     print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n')
+
+
+def genetic_algorithm(chessboard):
+    """ Genetic Algorithm for solving N-ything problem
+    
+    :param chessboard : Initial state of the chessboard
+
+    # I.S. : Random chessboard
+    # F.S. : Chessboard at global maximum/minimum
+    """
+
+    def create_population(chessboard):
+    """ Create a 4 random chromosome from the chessboard """
+
+        # Initiate empty population 
+        population = []
+
+        for i in range (0,4) :
+            chromosome = []
+
+            for chesspice in chessboard.list:
+                position = (randint(0,7), randint(0,7))
+
+                while position in chromosome:
+                    position = (randint(0,7), randint(0,7))
+
+                chromosome.append(position)
+
+            population.append(chromosome)
+
+        return population
+
+    # get white and black count
+    white_count = 0
+    for chesspice in chessboard.list:
+        if chesspice.color == Color[WHITE]:
+            white_count += 1
+
+    black_count = len(chessboard.list) - white_count
+
+    # create iniitial population population
+    population = create_population(chessboard)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
