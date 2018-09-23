@@ -136,10 +136,10 @@ def genetic_algorithm(chessboard):
         # Initiate empty population 
         population = []
 
-        for i in range (0,4) :
+        for i in range (4) :
             chromosome = []
 
-            for chesspice in chessboard.list:
+            for j in range(len(chessboard.list)):
                 position = (randint(0,7), randint(0,7))
 
                 while position in chromosome:
@@ -150,6 +150,32 @@ def genetic_algorithm(chessboard):
             population.append(chromosome)
 
         return population
+
+    def fitness_function(chessboard, chromosome, white_count, black_count):
+    """ 
+        Fitness function is for selecting chromosome to generate new chromosome
+        maximum_defense = Sum of Combination(number of chestpiece, 2) by color
+        defense = number of non attacking chestpiece with same color
+        attack = number of attackung chestpiece with same color
+
+        Returns fitness function
+    """
+        maximum_defense = ((len(white_count) * (len(white_count) - 1)) / 2) + ((len(black_count) * (len(black_count) - 1)) / 2)
+
+        for i in range (len(chessboard.list)):
+            chessboard.list[i].x = chromosome[i][0]
+            chessboard.list[i].y = chromosome[i][1]
+
+        attack, defense = chessboard.cost()
+
+        return maximum_defense - defense + attack
+
+    # def select_chromosome(chessboard, population, white_count, black_count):
+    # """
+    #     Selecting chromosome for crossover
+    # """
+    #     max
+
 
     # get white and black count
     white_count = 0
