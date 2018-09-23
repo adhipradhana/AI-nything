@@ -2,6 +2,7 @@ from src.chessboard import ChessBoard
 from src.chesspiece import Color
 from src.util import parser
 from src.algorithms import hill_climbing
+from src.algorithms import genetic_algorithm
 # import src.chessboard
 
 f = ChessBoard()
