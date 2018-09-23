@@ -6,7 +6,8 @@ from src.algorithms import hill_climbing
 
 f = ChessBoard()
 f.init_map("input.txt")
-hill_climbing(f)
+# hill_climbing(f)
+genetic_algorithm(f)
 # f.print()
 # f.move(f.list[1], 0, 0)
 # f.print()

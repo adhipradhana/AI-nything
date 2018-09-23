@@ -263,35 +263,19 @@ def genetic_algorithm(chessboard):
     # create iniitial population population
     population = create_population(chessboard)
 
+    # iteration algorithm
+    for i in range (100) :
+        crossbreed(chessboard, population, white_count, black_count)
 
+    # select largest chromosome
+    largest_index = select_chromosome(chessboard, population, white_count, black_count)
+    chromosome = population[largest_index[0]]
 
+    # assign to chessboard
+    for i in range (len(chessboard.list)):
+        chessboard.list[i].x = chromosome[i][0]
+        chessboard.list[i].y = chromosome[i][1]
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    # print chessboard
+    print(chessboard)
 
