@@ -145,7 +145,7 @@ def genetic_algorithm(chessboard, generation, mutation_percentage):
     # get white and black count
     white_count = 0
     for chesspice in chessboard.list:
-        if chesspice.color == 0: # color white
+        if chesspice.color == Color.WHITE: # color white
             white_count += 1
 
     black_count = chestpiece_length - white_count
