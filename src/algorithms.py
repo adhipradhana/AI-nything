@@ -327,11 +327,6 @@ def genetic_algorithm(chessboard):
 
         chessboard.grid[chessboard.list[i].x][chessboard.list[i].y] = chessboard.list[i].color
 
-    for chestpiece in chessboard.list:
-        print("position : " + str(chestpiece.x) + " " + str(chestpiece.y))
-        defense, attack = chestpiece.attack_defense(chessboard.grid)
-        print("defense attack : " + str(defense) + " " + str(attack))
-
     # print chessboard
     chessboard.print()
     defense, attack = chessboard.cost()
