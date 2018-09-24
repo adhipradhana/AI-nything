@@ -168,8 +168,12 @@ def genetic_algorithm(chessboard):
         maximum_defense = (white_count * (white_count - 1)) + (black_count * (black_count - 1))
 
         for i in range (chestpiece_length):
+            chessboard.grid[chessboard.list[i].x][chessboard.list[i].y] = None
+
             chessboard.list[i].x = chromosome[i][0]
             chessboard.list[i].y = chromosome[i][1]
+
+            chessboard.grid[chessboard.list[i].x][chessboard.list[i].y] = chessboard.list[i].color
 
         defense, attack = chessboard.cost()
 
@@ -316,8 +320,17 @@ def genetic_algorithm(chessboard):
 
     # assign to chessboard
     for i in range (chestpiece_length):
+        chessboard.grid[chessboard.list[i].x][chessboard.list[i].y] = None
+
         chessboard.list[i].x = chromosome[i][0]
         chessboard.list[i].y = chromosome[i][1]
+
+        chessboard.grid[chessboard.list[i].x][chessboard.list[i].y] = chessboard.list[i].color
+
+    for chestpiece in chessboard.list:
+        print("position : " + str(chestpiece.x) + " " + str(chestpiece.y))
+        defense, attack = chestpiece.attack_defense(chessboard.grid)
+        print("defense attack : " + str(defense) + " " + str(attack))
 
     # print chessboard
     chessboard.print()
