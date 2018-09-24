@@ -163,7 +163,10 @@ class ChessBoard:
         if index_valid(x, y):
             if self.grid[x][y] is None:
                 for chesspiece in self.list:
+                    # print(self.grid[x][y])
                     if chesspiece == piece:
+                        self.grid[x][y] = chesspiece.color
+                        self.grid[chesspiece.x][chesspiece.y] = None
                         chesspiece.x = x
                         chesspiece.y = y
                         break
@@ -172,6 +175,21 @@ class ChessBoard:
         else:
             raise ChessBoardPositionError("Position invalid")
 
-    
+    def print_pieces_location(self):
+        for selected_piece in self.list:
+            if selected_piece.chesspiece_type == PieceType.QUEEN:
+                chesstype = 'QUEEN'
+            elif selected_piece.chesspiece_type == PieceType.ROOK:
+                chesstype = 'ROOK'
+            elif selected_piece.chesspiece_type == PieceType.BISHOP:
+                chesstype = 'BISHOP'
+            else:
+                chesstype = 'KNIGHT'
+
+            if selected_piece.color == Color.WHITE:
+                colortype = 'WHITE'
+            else:
+                colortype = 'BLACK'
+            print('{} {} ({},{})'.format(chesstype, colortype, selected_piece.x, selected_piece.y))
 
     
