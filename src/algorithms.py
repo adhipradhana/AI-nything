@@ -263,7 +263,7 @@ def genetic_algorithm(chessboard):
             new_population.append(new_chromosome)
 
         mutation_index = random.randint(0, population_size - 1)
-        mutation(population[mutation_index], mutation_percentage)
+        mutation(new_population[mutation_index], mutation_percentage)
 
         population = new_population
 
