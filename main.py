@@ -8,7 +8,7 @@ from src.algorithms import genetic_algorithm
 f = ChessBoard()
 f.init_map("input.txt")
 # hill_climbing(f)
-genetic_algorithm(f, 1000, 100)
+genetic_algorithm(f)
 # f.print()
 # f.move(f.list[1], 0, 0)
 # f.print()
