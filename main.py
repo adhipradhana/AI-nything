@@ -1,12 +1,12 @@
 from src.chessboard import ChessBoard
 from src.chesspiece import Color
 from src.util import parser
-from src.algorithms import hill_climbing
+from src.algorithms import simulated_annealing
 # import src.chessboard
 
 f = ChessBoard()
 f.init_map("input.txt")
-hill_climbing(f)
+simulated_annealing(f)
 # f.print()
 # f.move(f.list[1], 0, 0)
 # f.print()
