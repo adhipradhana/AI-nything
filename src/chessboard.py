@@ -231,6 +231,7 @@ class ChessBoard:
                 for chesspiece in self.list:
                     # print(self.grid[x][y])
                     if chesspiece == piece:
+                        # print("{} {} init".format(chesspiece.x,chesspiece.y))
                         self.grid[x][y] = chesspiece.color
                         self.grid[chesspiece.x][chesspiece.y] = None
                         chesspiece.x = x
