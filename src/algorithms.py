@@ -183,13 +183,13 @@ def simulated_annealing(chessboard):
 		return: choose current move? boolean
 
 		"""
-		if (best_cost == None) or ((move_cost[0] <= best_cost[0]) and (move_cost[1] >= best_cost[1])) :
+		if (best_cost == None) or ((move_cost[0] <= best_cost[0]) and (move_cost[1] >= best_cost[1])):
 			return True
 		else:
 			probability_0 = min(exp((best_cost[0] - move_cost[0]) / temperature), 1)
 			probability_1 = min(exp((move_cost[1] - best_cost[1]) / temperature), 1)
-			avg_probability = (probability_0 + probability_1) / 2
-			return random.choices([True, False], cum_weights = [avg_probability, 1-avg_probability], k = 1)[0]
+			avg_probability = (probability_0 + probability_1) / 2 if (probability_1 != 0) else probability_0
+			return True if (avg_probability > 0.7) else False
 
 	def execute_iteration(chessboard, best_cost, temperature):
 		"""
@@ -200,7 +200,6 @@ def simulated_annealing(chessboard):
 				temperature: int 		-> current temperature
 		"""
 		for i in range(100):
-			# print("Temperature ", temperature)
 
 			selected_piece = chessboard.list[random.randint(0, len(chessboard.list) - 1)]
 			init_x = selected_piece.x
@@ -221,18 +220,19 @@ def simulated_annealing(chessboard):
 	#Main
 	chessboard.print()
 	print("Initial cost: {}".format(chessboard.cost()))
-	init_temp = int(input("Input initial temperature: "))
-	temp_dec_gradient = int(input("Input temperature decrease gradient: "))
-	best_cost = [999999, -1]
+	init_temp = float(input("Input initial temperature: "))
+	temp_dec_gradient = float(input("Input temperature decrease gradient: "))
+	best_cost = [999999, 0]
 	curr_temp = init_temp
 
 	start_time = time.time()
 
 	iteration = 0
-	while (curr_temp > 0):
+	while (curr_temp > 0.001):
+		print(curr_temp)
 		iteration += 1
 		best_cost = execute_iteration(chessboard, best_cost, curr_temp)
-		curr_temp = init_temp - iteration*temp_dec_gradient
+		curr_temp = init_temp - (iteration*temp_dec_gradient)
 
 	end_time = time.time()
 
