@@ -18,16 +18,16 @@ class ChessBoard:
         pieces = parser(filename)
         for piece in pieces:
             if piece[1] == 'KNIGHT':
-                for i in range(0, int(piece[2])):
+                for _ in range(0, int(piece[2])):
                     self.create_knight(Color[piece[0]])
             elif piece[1] == 'ROOK':
-                for i in range(0, int(piece[2])):
+                for _ in range(0, int(piece[2])):
                     self.create_rook(Color[piece[0]])
             elif piece[1] == 'QUEEN':
-                for i in range(0, int(piece[2])):
+                for _ in range(0, int(piece[2])):
                     self.create_queen(Color[piece[0]])
             elif piece[1] == 'BISHOP':
-                for i in range(0, int(piece[2])):
+                for _ in range(0, int(piece[2])):
                     self.create_bishop(Color[piece[0]])
 
     def create_rook(self, color):
@@ -103,19 +103,85 @@ class ChessBoard:
         """ Prints the chessboard """
         temp_grid = [['.' for j in range(8)] for i in range(8)]
         characterize = {
-            PieceType.BISHOP: 'B',
-            PieceType.ROOK: 'R',
-            PieceType.QUEEN: 'Q',
-            PieceType.KNIGHT: 'K',
+            Color.BLACK: {
+                PieceType.BISHOP: '\u2657',
+                PieceType.ROOK: '\u2656',
+                PieceType.QUEEN: '\u2655',
+                PieceType.KNIGHT: '\u2658',
+            },
+            Color.WHITE: {
+                PieceType.BISHOP: '\u265d',
+                PieceType.ROOK: '\u265c',
+                PieceType.QUEEN: '\u265b',
+                PieceType.KNIGHT: '\u265e',
+            }
+        }
+
+        background = {
+            "black": "\x1B[100m",
+            "white": "\x1B[0;30;47m",
+            "default": "\x1B[0m"
         }
         for chesspiece in self.list:
-            temp_grid[chesspiece.y][chesspiece.x] = characterize[chesspiece.chesspiece_type]
-            if chesspiece.color == Color.BLACK: 
-                temp_grid[chesspiece.y][chesspiece.x] = temp_grid[chesspiece.y][chesspiece.x].lower()
-        print("-"*17)
-        for row in reversed(temp_grid):
-            print("|" + ("|").join(row) + "|")
-            print("-"*17)
+            i = chesspiece.y
+            j = chesspiece.x
+            if ((i + 1) * 8 + j + 1) % 2 == 0:
+                if i % 2 == 0:
+                    # Background white
+                    if chesspiece.color == Color.BLACK:
+                        temp_grid[chesspiece.y][chesspiece.x] = characterize[Color.WHITE][chesspiece.chesspiece_type]
+                    else:
+                        temp_grid[chesspiece.y][chesspiece.x] = characterize[Color.BLACK][chesspiece.chesspiece_type]
+                else:
+                    # Background black
+                    if chesspiece.color == Color.BLACK:
+                        temp_grid[chesspiece.y][chesspiece.x] = characterize[Color.BLACK][chesspiece.chesspiece_type]
+                    else:
+                        temp_grid[chesspiece.y][chesspiece.x] = characterize[Color.WHITE][chesspiece.chesspiece_type]
+            else: 
+                if i % 2 == 0:
+                    # Background black
+                    if chesspiece.color == Color.BLACK:
+                        temp_grid[chesspiece.y][chesspiece.x] = characterize[Color.BLACK][chesspiece.chesspiece_type]
+                    else:
+                        temp_grid[chesspiece.y][chesspiece.x] = characterize[Color.WHITE][chesspiece.chesspiece_type]
+                else:
+                    # Background white
+                    if chesspiece.color == Color.BLACK:
+                        temp_grid[chesspiece.y][chesspiece.x] = characterize[Color.WHITE][chesspiece.chesspiece_type]
+                    else:
+                        temp_grid[chesspiece.y][chesspiece.x] = characterize[Color.BLACK][chesspiece.chesspiece_type]
+
+        print()
+
+        print(" - ", end="")
+        for i in range(8):
+            print(" {} ".format(i), end="")
+        print(" - ")
+
+        for i in range(7, -1, -1):
+            print(" {} ".format(i), end="")
+            for j in range(8):
+                if ((i + 1) * 8 + j + 1) % 2 == 0:
+                    if i % 2 == 0:
+                        print(background["white"], end="")
+                    else:
+                        print(background["black"], end="")
+                else: 
+                    if i % 2 == 0:
+                        print(background["black"], end="")
+                    else:
+                        print(background["white"], end="")
+                print(" " + temp_grid[i][j] + " ", end="")
+                print(background["default"], end="")
+            print(" {} ".format(i))
+
+        print(" - ", end="")
+        for i in range(8):
+            print(" {} ".format(i), end="")
+        print(" - ")
+
+        print()
 
     def cost(self):
         """
