@@ -220,15 +220,15 @@ def simulated_annealing(chessboard):
 
     end_time = time.time()
 
-    # print result
-    print('\n')
-    chessboard.print()
-    print('\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-    print('\n------------------- SIMULATED ANNEALING ALGORITHM -------------------\n')
-    print('Total trial(s):   {}'.format(iteration * 100))
-    print('\nBest result:')
-    print('  * best cost:    {}'.format(best_cost))
-    print('  * elapsed time: {} ms'.format((end_time - start_time) * 1000))
+	# print result
+	print('\n')
+	chessboard.print()
+	print('\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+	print('\n------------------- SIMULATED ANNEALING ALGORITHM -------------------\n')
+	print('Total trial(s):   {}'.format(iteration * 100))
+	print('\nBest result:')
+	print('  * best cost:    {}'.format(best_cost))
+	print('  * elapsed time: {} ms'.format((end_time - start_time) * 1000))
     # print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n')
     # print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n')
 
@@ -442,4 +442,5 @@ def genetic_algorithm(chessboard):
     print("Number of defense : " + str(defense))
     
     end_time = time.time() - start_time
-print("elapsed time : " + str(end_time))
+    print("elapsed time : " + str(end_time))
+
