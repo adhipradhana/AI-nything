@@ -129,56 +129,56 @@ def hill_climbing(chessboard):
     print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n')
 
 def simulated_annealing(chessboard):
-    """
-    Simulated Annealing algorithm for solving N-ything problem
-    note: using linear decrease for temperature with gradient user-specified per 100 steps.
-    params: chessboard: chessboard  -> initial state of chessboard
-    I.S.    : random chessboard, init_temp specified
-    F.S.    : chessboard at/near global maximum
-    """
+	"""
+	Simulated Annealing algorithm for solving N-ything problem
+	note: using linear decrease for temperature with gradient user-specified per 100 steps.
+	params: chessboard: chessboard  -> initial state of chessboard
+	I.S.    : random chessboard, init_temp specified
+	F.S.    : chessboard at/near global maximum
+	"""
 
-    def find_neighbour(chessboard, selected_piece):
-        """
-        Find valid adjacent move
-        params: chessboard: chessboard      -> current state of the chessboard
-                selected_piece: chesspiece  -> randomly selected piece
-        return: list of valid adjacent move
-        """
-        valid_neighbour = []
-        for x in range(0,8):
-            for y in range(0,8):
-                if chessboard.grid[x][y] is None:
-                    valid_neighbour.append([x,y])
-        return valid_neighbour
+	def find_neighbour(chessboard, selected_piece):
+		"""
+		Find valid adjacent move
+		params: chessboard: chessboard      -> current state of the chessboard
+		        selected_piece: chesspiece  -> randomly selected piece
+		return: list of valid adjacent move
+		"""
+		valid_neighbour = []
+		for x in range(0,8):
+			for y in range(0,8):
+				if chessboard.grid[x][y] is None:
+					valid_neighbour.append([x,y])
+		return valid_neighbour
 
-    def select_random_neighbour(neighbour_list):
-        """
-        Select a random neighbour from neighbours list
-        params: neightbour_list: list of neighbour
-        raturn: selected_neighbour: neighbour
-        """
-        return neighbour_list[random.randint(0, len(neighbour_list) - 1)]
+	def select_random_neighbour(neighbour_list):
+		"""
+		Select a random neighbour from neighbours list
+		params: neightbour_list: list of neighbour
+		raturn: selected_neighbour: neighbour
+		"""
+		return neighbour_list[random.randint(0, len(neighbour_list) - 1)]
 
-    def choose_current_path(move_cost, best_cost, temperature):
-        """
-        Selecting current move as best move with probability calculated using Boltzman Distribution
-        params: move_cost: int,int      -> to-be-selected current move cost
-                best_cost: int,int      -> current best move cost
-                temperature: int        -> current temperature
-        return: choose current move? boolean
-        """
-        if (best_cost == None) or ((move_cost[0] <= best_cost[0]) and (move_cost[1] >= best_cost[1])):
-            return True
-        else:
-            probability_0 = min(exp((best_cost[0] - move_cost[0]) / temperature), 1)
-            probability_1 = min(exp((move_cost[1] - best_cost[1]) / temperature), 1)
-            avg_probability = (probability_0 + probability_1) / 2 if (probability_1 != 0) else probability_0
-            return True if (avg_probability > 0.7) else False
+	def choose_current_path(move_cost, best_cost, temperature):
+		"""
+		Selecting current move as best move with probability calculated using Boltzman Distribution
+		params: move_cost: int,int      -> to-be-selected current move cost
+		        best_cost: int,int      -> current best move cost
+		        temperature: int        -> current temperature
+		return: choose current move? boolean
+		"""
+		if (best_cost == None) or ((move_cost[0] <= best_cost[0]) and (move_cost[1] >= best_cost[1])):
+			return True
+		else:
+			probability_0 = min(exp((best_cost[0] - move_cost[0]) / temperature), 1)
+			probability_1 = min(exp((move_cost[1] - best_cost[1]) / temperature), 1)
+			avg_probability = (probability_0 + probability_1) / 2 if (probability_1 != 0) else probability_0
+			return True if (avg_probability > 0.7) else False
 
-    def execute_iteration(chessboard, best_cost, temperature):
-        """
-        Do an iteration of the program using simulated annealing
-        params: chessboard: chessboard
+	def execute_iteration(chessboard, best_cost, temperature):
+		"""
+		Do an iteration of the program using simulated annealing
+		params: chessboard: chessboard
 				best_cost: int, int 	-> current best move cost
 				temperature: int 		-> current temperature
 		"""
@@ -207,7 +207,7 @@ def simulated_annealing(chessboard):
 		return copy.deepcopy(best_cost)
 
 
-    #Main
+	#Main
 	print('\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
 	print('\n------------------- SIMULATED ANNEALING ALGORITHM -------------------\n')
 	chessboard.print()
