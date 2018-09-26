@@ -46,7 +46,7 @@ while not exit:
         exit = True
 # simulated_annealing(f)
 # hill_climbing(f)
-genetic_algorithm(f)
+# genetic_algorithm(f)
 # f.print()
 # f.move(f.list[1], 0, 0)
 # f.print()
