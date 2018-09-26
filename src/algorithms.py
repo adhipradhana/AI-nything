@@ -108,13 +108,13 @@ def hill_climbing(chessboard):
     print('\n------------------- RANDOM-RESTART STOCHASTIC HILL CLIMBING ALGORITHM -------------------\n')
     restart = input('input total restart(s): ')
     success = 0
-    for i in range(int(restart)):
+    for _ in range(int(restart)):
         chessboard.randomize()
         current_result = solve_hill_climbing(chessboard)
         if current_result['best_cost'][0] == 0:
             success += 1
         best_result = update_best_result(current_result)
-        print(str(round((current_result['time_elapsed'] * 1000), 4)) + ' ms' + ', cost: ' + str(current_result['best_cost']))
+        print(str(round((current_result['time_elapsed'] * 1000), 4)) + ' ms' + ', cost: ' + str(current_result['best_cost']), end="\r")
     success_rate = round((success / int(restart)), 4)
 
     # print result
@@ -124,7 +124,6 @@ def hill_climbing(chessboard):
     # print('Success rate:     {} %'.format(success_rate * 100))
     print('\nBest result:')
     best_result['chessboard'].print()
-    print('{} {}'.format(best_result['best_cost'][0],best_result['best_cost'][1]))
     print('  * best cost:    {}'.format(best_result['best_cost']))
     print('  * total step:   {}'.format(best_result['step']))
     print('  * elapsed time: {} ms'.format(best_result['time_elapsed'] * 1000))
