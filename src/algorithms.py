@@ -199,6 +199,7 @@ def simulated_annealing(chessboard):
 				best_cost: int, int 	-> current best move cost
 				temperature: int 		-> current temperature
 		"""
+		start_time = time.time()
 		for i in range(100):
 
 			selected_piece = chessboard.list[random.randint(0, len(chessboard.list) - 1)]
@@ -214,10 +215,18 @@ def simulated_annealing(chessboard):
 				best_cost = selected_cost
 			else:
 				chessboard.move(selected_piece, init_x, init_y)
+		end_time = time.time()
+
+		print(chr(27) + "[2J")
+		chessboard.print()
+		print(str(round(((end_time - start_time) * 1000), 4)) + ' ms' + ', Cost: ' + str(best_cost) + ', Temperature: ' + str(temperature))
+
 		return copy.deepcopy(best_cost)
 
 
 	#Main
+	print('\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+	print('\n------------------- SIMULATED ANNEALING ALGORITHM -------------------\n')
 	chessboard.print()
 	print("Initial cost: {}".format(chessboard.cost()))
 	init_temp = float(input("Input initial temperature: "))
@@ -229,7 +238,6 @@ def simulated_annealing(chessboard):
 
 	iteration = 0
 	while (curr_temp > 0.001):
-		print(curr_temp)
 		iteration += 1
 		best_cost = execute_iteration(chessboard, best_cost, curr_temp)
 		curr_temp = init_temp - (iteration*temp_dec_gradient)
@@ -237,10 +245,10 @@ def simulated_annealing(chessboard):
 	end_time = time.time()
 
 	# print result
+
 	print('\n')
+	print(chr(27) + "[2J")
 	chessboard.print()
-	print('\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-	print('\n------------------- SIMULATED ANNEALING ALGORITHM -------------------\n')
 	print('Total trial(s):   {}'.format(iteration * 100))
 	print('\nBest result:')
 	print('  * best cost:    {}'.format(best_cost))
