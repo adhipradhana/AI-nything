@@ -1,13 +1,13 @@
-from src.chesspiece import index_valid
-from math import exp
-from src.chesspiece import Color
-import numpy as np
-import src.chessboard
-import src.chesspiece
 import heapq
 import time
 import random
 import copy
+import numpy as np
+from math import exp
+
+from src.chesspiece import index_valid, Color
+import src.chessboard
+from src.util import TerminalColor, get_terminal_width, clear
 
 def hill_climbing(chessboard):
     """ Random-restart Stochastic Hill Climbing algorithm function for N-ything problem
@@ -103,30 +103,42 @@ def hill_climbing(chessboard):
             return best_result
 
     # main
-    print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-    print('\n------------------- RANDOM-RESTART STOCHASTIC HILL CLIMBING ALGORITHM -------------------\n')
-    restart = input('input total restart(s): ')
-    success = 0
+    print()
+    print(TerminalColor.YELLOW + '=' * get_terminal_width())
+    print('-' * int((get_terminal_width() - 51) / 2), end="")
+    print(TerminalColor.BOLD + TerminalColor.DARKCYAN + " RANDOM RESTART STOCHASTIC HILL CLIMBING ALGORITHM " + TerminalColor.YELLOW, end="")
+    print('-' * int((get_terminal_width() - 51) / 2))
+    print('=' * get_terminal_width() + TerminalColor.END)
+    print()
+    print('Number of restart(s) : ')
+    restart = input(TerminalColor.DARKCYAN + '➜' + TerminalColor.END + " ")
+    print()
+
     for _ in range(int(restart)):
         chessboard.randomize()
         current_result = solve_hill_climbing(chessboard)
-        if current_result['best_cost'][0] == 0:
-            success += 1
         best_result = update_best_result(current_result)
         print(str(round((current_result['time_elapsed'] * 1000), 4)) + ' ms' + ', cost: ' + str(current_result['best_cost']), end="\r")
-    success_rate = round((success / int(restart)), 4)
 
     # print result
-    print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-    print('Total restart(s):   {}'.format(restart))
-    # print('Solution found:   {} times'.format(success))
-    # print('Success rate:     {} %'.format(success_rate * 100))
-    print('\nBest result:')
-    best_result['chessboard'].print()
-    print('  * best cost:    {}'.format(best_result['best_cost']))
-    print('  * total step:   {}'.format(best_result['step']))
-    print('  * elapsed time: {} ms'.format(best_result['time_elapsed'] * 1000))
-    print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n')
+    print(TerminalColor.YELLOW + '=' * get_terminal_width())
+    print('-' * int((get_terminal_width() - 13) / 2), end="")
+    print(TerminalColor.BOLD + TerminalColor.DARKCYAN + " BEST RESULT " + TerminalColor.YELLOW, end="")
+    print('-' * int((get_terminal_width() - 13) / 2))
+    print('=' * get_terminal_width() + TerminalColor.END)
+
+    best_result['chessboard'].print(True)
+    print(' ' * int((get_terminal_width() - 36) / 2) + '{}===================================={}'.format(TerminalColor.YELLOW, TerminalColor.END))
+    print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Total restart(s)  : {:7s}    {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, restart, TerminalColor.YELLOW, TerminalColor.END))
+    print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Best cost         : {:7s}    {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, str(best_result['best_cost']), TerminalColor.YELLOW, TerminalColor.END))
+    print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Total step        : {:7d}    {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, best_result['step'], TerminalColor.YELLOW, TerminalColor.END))
+    print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Elapsed time      : {:7.2f} ms {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, float(best_result['time_elapsed']) * 1000, TerminalColor.YELLOW, TerminalColor.END))
+    print(' ' * int((get_terminal_width() - 36) / 2) + '{}===================================={}'.format(TerminalColor.YELLOW, TerminalColor.END))
+
+    print()
+    print(TerminalColor.YELLOW + '=' * get_terminal_width() + TerminalColor.END)
+
+    input(TerminalColor.BOLD + TerminalColor.ITALIC + TerminalColor.DARKCYAN + "Press Enter to continue...  " + TerminalColor.END)
 
 def simulated_annealing(chessboard):
 	"""
@@ -254,10 +266,10 @@ def genetic_algorithm(chessboard):
         # Initiate empty population
         population = []
 
-        for i in range (population_size) :
+        for _ in range (population_size) :
             chromosome = []
 
-            for j in range(len(chessboard.list)):
+            for _ in range(len(chessboard.list)):
                 gene = (random.randint(0,7), random.randint(0,7))
 
                 while gene in chromosome:
@@ -368,7 +380,7 @@ def genetic_algorithm(chessboard):
 
         new_population = []
         # crossbreed as many as population size
-        for i in range(population_size):
+        for _ in range(population_size):
             # select chromosome for crossbreed
             chromosome_index_1, chromosome_index_2 = select_chromosome(population_index, percentages)
 
@@ -424,7 +436,7 @@ def genetic_algorithm(chessboard):
 
     # iteration algorithm
     for i in range (generation) :
-        print("iteration " + str(i))
+        print("iteration " + str(i), end="\r")
         create_generation(population, population_index, population_size, mutation_percentage)
 
     # select best chromosome
