@@ -1,38 +1,3 @@
-
-Skip to content
-
-    Pull requests
-    Issues
-    Marketplace
-    Explore
-
-    @Nicholaz99
-
-0
-0
-
-    0
-
-abrampers/AI-nything Private
-Code
-Issues 0
-Pull requests 0
-Projects 0
-Wiki
-Insights
-AI-nything/src/algorithms.py
-30f0b91 13 minutes ago
-@abrampers abrampers Input output algorithms udah kelar semua cokkkkkkkkkkk
-@adhipradhana
-@yusufrahmatp
-@Ilhamfp31
-@abrampers
-@Nicholaz99
-Code Climate Options
-Show issues
-Show test coverage
-Highlight covered lines
-517 lines (410 sloc) 22.1 KB
 import heapq
 import time
 import random
@@ -548,19 +513,3 @@ def genetic_algorithm(chessboard):
 
     input(TerminalColor.BOLD + TerminalColor.ITALIC + TerminalColor.DARKCYAN + "Press Enter to continue...  " + TerminalColor.END)
     clear()
-
-    © 2018 GitHub, Inc.
-    Terms
-    Privacy
-    Security
-    Status
-    Help
-
-    Contact GitHub
-    Pricing
-    API
-    Training
-    Blog
-    About
-
-Press h to open a hovercard with more details.
