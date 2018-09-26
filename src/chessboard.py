@@ -167,25 +167,25 @@ class ChessBoard:
             print(" {} ".format(chr(c)), end="")
         print("   ")
 
-        for i in range(8, 0, -1):
+        for i in range(7, -1, -1):
             if centered:
                 print(' ' * int((columns - 28) / 2), end="")
 
-            print(" {} ".format(i), end="")
+            print(" {} ".format(i + 1), end="")
             for j in range(8):
-                if (i * 8 + j) % 2 == 0:
+                if ((i + 1) * 8 + j + 1) % 2 == 0:
                     if i % 2 == 0:
-                        print(background["black"], end="")
-                    else:
                         print(background["white"], end="")
+                    else:
+                        print(background["black"], end="")
                 else: 
                     if i % 2 == 0:
-                        print(background["white"], end="")
-                    else:
                         print(background["black"], end="")
-                print(" " + temp_grid[i - 1][j - 1] + " ", end="")
+                    else:
+                        print(background["white"], end="")
+                print(" " + temp_grid[i][j] + " ", end="")
                 print(background["default"], end="")
-            print(" {} ".format(i))
+            print(" {} ".format(i + 1))
 
         if centered:
             print(' ' * int((columns - 28) / 2), end="")
@@ -196,6 +196,7 @@ class ChessBoard:
         print("   ")
 
         print()
+        
 
     def cost(self):
         """
