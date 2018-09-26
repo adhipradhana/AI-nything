@@ -21,10 +21,10 @@ while not ex:
     print("4. Genetic Algorithm")
     print("5. Print Chessboard")
     print("6. Exit")
-    choose = raw_input()
+    choose = input()
     if (choose == "1"):
         print("Masukkan nama file :")
-        filename = raw_input()
+        filename = input()
         try:
             c.init_map(filename)
             init = True

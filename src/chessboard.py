@@ -1,7 +1,12 @@
 from random import randint
+import os
+
 from .chesspiece import Rook, Bishop, Queen, Knight, Color, PieceType, index_valid
 from .chessboard_error import ChessBoardFullError, ChessBoardPositionError
 from .util import parser
+
+rows, columns = os.popen('stty size', 'r').read().split()
+rows, columns = int(rows), int(columns)
 
 class ChessBoard:
     """ ChessBoard class """
@@ -99,9 +104,9 @@ class ChessBoard:
             chesspiece.x = new_x
             chesspiece.y = new_y
 
-    def print(self):
+    def print(self, centered=False):
         """ Prints the chessboard """
-        temp_grid = [['.' for j in range(8)] for i in range(8)]
+        temp_grid = [[' ' for j in range(8)] for i in range(8)]
         characterize = {
             Color.BLACK: {
                 PieceType.BISHOP: '\u2657',
@@ -154,32 +159,41 @@ class ChessBoard:
 
         print()
 
-        print(" - ", end="")
-        for i in range(8):
-            print(" {} ".format(i), end="")
-        print(" - ")
+        if centered:
+            print(' ' * int((columns - 28) / 2), end="")
 
-        for i in range(7, -1, -1):
+        print("   ", end="")
+        for c in range(ord('a'), ord('h') + 1):
+            print(" {} ".format(chr(c)), end="")
+        print("   ")
+
+        for i in range(8, 0, -1):
+            if centered:
+                print(' ' * int((columns - 28) / 2), end="")
+
             print(" {} ".format(i), end="")
             for j in range(8):
-                if ((i + 1) * 8 + j + 1) % 2 == 0:
+                if (i * 8 + j) % 2 == 0:
                     if i % 2 == 0:
-                        print(background["white"], end="")
-                    else:
                         print(background["black"], end="")
+                    else:
+                        print(background["white"], end="")
                 else: 
                     if i % 2 == 0:
-                        print(background["black"], end="")
-                    else:
                         print(background["white"], end="")
-                print(" " + temp_grid[i][j] + " ", end="")
+                    else:
+                        print(background["black"], end="")
+                print(" " + temp_grid[i - 1][j - 1] + " ", end="")
                 print(background["default"], end="")
             print(" {} ".format(i))
 
-        print(" - ", end="")
-        for i in range(8):
-            print(" {} ".format(i), end="")
-        print(" - ")
+        if centered:
+            print(' ' * int((columns - 28) / 2), end="")
+
+        print("   ", end="")
+        for c in range(ord('a'), ord('h') + 1):
+            print(" {} ".format(chr(c)), end="")
+        print("   ")
 
         print()
 
