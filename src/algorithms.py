@@ -132,7 +132,6 @@ def hill_climbing(chessboard):
     print('  * best cost:    {}'.format(best_result['best_cost']))
     print('  * total step:   {}'.format(best_result['step']))
     print('  * elapsed time: {} ms'.format(best_result['time_elapsed'] * 1000))
-<<<<<<< HEAD
     print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n')
 
 def simulated_annealing(chessboard):
@@ -249,9 +248,8 @@ def simulated_annealing(chessboard):
 	print('\nBest result:')
 	print('  * best cost:    {}'.format(best_cost))
 	print('  * elapsed time: {} ms'.format((end_time - start_time) * 1000))
-	print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n')
-=======
-    print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n')
+    # print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n')
+    # print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n')
 
 
 def genetic_algorithm(chessboard):
@@ -469,4 +467,3 @@ def genetic_algorithm(chessboard):
 
 
 
->>>>>>> genetic

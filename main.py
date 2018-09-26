@@ -1,19 +1,16 @@
 from src.chessboard import ChessBoard
 from src.chesspiece import Color
 from src.util import parser
-<<<<<<< HEAD
 from src.algorithms import simulated_annealing
-=======
 from src.algorithms import hill_climbing
 from src.algorithms import genetic_algorithm
->>>>>>> genetic
 # import src.chessboard
 
 f = ChessBoard()
 f.init_map("input.txt")
 # simulated_annealing(f)
 # hill_climbing(f)
-# genetic_algorithm(f)
+genetic_algorithm(f)
 # f.print()
 # f.move(f.list[1], 0, 0)
 # f.print()
