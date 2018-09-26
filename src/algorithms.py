@@ -1,3 +1,38 @@
+
+Skip to content
+
+    Pull requests
+    Issues
+    Marketplace
+    Explore
+
+    @Nicholaz99
+
+0
+0
+
+    0
+
+abrampers/AI-nything Private
+Code
+Issues 0
+Pull requests 0
+Projects 0
+Wiki
+Insights
+AI-nything/src/algorithms.py
+30f0b91 13 minutes ago
+@abrampers abrampers Input output algorithms udah kelar semua cokkkkkkkkkkk
+@adhipradhana
+@yusufrahmatp
+@Ilhamfp31
+@abrampers
+@Nicholaz99
+Code Climate Options
+Show issues
+Show test coverage
+Highlight covered lines
+517 lines (410 sloc) 22.1 KB
 import heapq
 import time
 import random
@@ -103,7 +138,7 @@ def hill_climbing(chessboard):
             return best_result
 
     # main
-    print()
+    clear()
     print(TerminalColor.YELLOW + '=' * get_terminal_width())
     print('-' * int((get_terminal_width() - 51) / 2), end="")
     print(TerminalColor.BOLD + TerminalColor.DARKCYAN + " RANDOM RESTART STOCHASTIC HILL CLIMBING ALGORITHM " + TerminalColor.YELLOW, end="")
@@ -114,17 +149,20 @@ def hill_climbing(chessboard):
     restart = input(TerminalColor.DARKCYAN + '➜' + TerminalColor.END + " ")
     print()
 
+    start_time = time.time()
     for _ in range(int(restart)):
         chessboard.randomize()
         current_result = solve_hill_climbing(chessboard)
         best_result = update_best_result(current_result)
         print(str(round((current_result['time_elapsed'] * 1000), 4)) + ' ms' + ', cost: ' + str(current_result['best_cost']), end="\r")
+    elapsed_time = time.time() - start_time
 
     # print result
+    clear()
     print(TerminalColor.YELLOW + '=' * get_terminal_width())
-    print('-' * int((get_terminal_width() - 13) / 2), end="")
-    print(TerminalColor.BOLD + TerminalColor.DARKCYAN + " BEST RESULT " + TerminalColor.YELLOW, end="")
-    print('-' * int((get_terminal_width() - 13) / 2))
+    print('-' * int((get_terminal_width() - 28) / 2), end="")
+    print(TerminalColor.BOLD + TerminalColor.DARKCYAN + " HILL CLIMBING: BEST RESULT " + TerminalColor.YELLOW, end="")
+    print('-' * int((get_terminal_width() - 28) / 2))
     print('=' * get_terminal_width() + TerminalColor.END)
 
     best_result['chessboard'].print(True)
@@ -132,127 +170,145 @@ def hill_climbing(chessboard):
     print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Total restart(s)  : {:7s}    {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, restart, TerminalColor.YELLOW, TerminalColor.END))
     print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Best cost         : {:7s}    {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, str(best_result['best_cost']), TerminalColor.YELLOW, TerminalColor.END))
     print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Total step        : {:7d}    {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, best_result['step'], TerminalColor.YELLOW, TerminalColor.END))
-    print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Elapsed time      : {:7.2f} ms {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, float(best_result['time_elapsed']) * 1000, TerminalColor.YELLOW, TerminalColor.END))
+    print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Elapsed time      : {:7.2f} ms {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, elapsed_time * 1000, TerminalColor.YELLOW, TerminalColor.END))
     print(' ' * int((get_terminal_width() - 36) / 2) + '{}===================================={}'.format(TerminalColor.YELLOW, TerminalColor.END))
 
     print()
     print(TerminalColor.YELLOW + '=' * get_terminal_width() + TerminalColor.END)
 
     input(TerminalColor.BOLD + TerminalColor.ITALIC + TerminalColor.DARKCYAN + "Press Enter to continue...  " + TerminalColor.END)
+    clear()
 
 def simulated_annealing(chessboard):
-	"""
-	Simulated Annealing algorithm for solving N-ything problem
-	note: using linear decrease for temperature with gradient user-specified per 100 steps.
-	params: chessboard: chessboard  -> initial state of chessboard
-	I.S.    : random chessboard, init_temp specified
-	F.S.    : chessboard at/near global maximum
-	"""
+    """
+    Simulated Annealing algorithm for solving N-ything problem
+    note: using linear decrease for temperature with gradient user-specified per 100 steps.
+    params: chessboard: chessboard  -> initial state of chessboard
+    I.S.    : random chessboard, init_temp specified
+    F.S.    : chessboard at/near global maximum
+    """
 
-	def find_neighbour(chessboard, selected_piece):
-		"""
-		Find valid adjacent move
-		params: chessboard: chessboard      -> current state of the chessboard
-		        selected_piece: chesspiece  -> randomly selected piece
-		return: list of valid adjacent move
-		"""
-		valid_neighbour = []
-		for x in range(0,8):
-			for y in range(0,8):
-				if chessboard.grid[x][y] is None:
-					valid_neighbour.append([x,y])
-		return valid_neighbour
+    def find_neighbour(chessboard, selected_piece):
+        """
+        Find valid adjacent move
+        params: chessboard: chessboard      -> current state of the chessboard
+                selected_piece: chesspiece  -> randomly selected piece
+        return: list of valid adjacent move
+        """
+        valid_neighbour = []
+        for x in range(0,8):
+            for y in range(0,8):
+                if chessboard.grid[x][y] is None:
+                    valid_neighbour.append([x,y])
+        return valid_neighbour
 
-	def select_random_neighbour(neighbour_list):
-		"""
-		Select a random neighbour from neighbours list
-		params: neightbour_list: list of neighbour
-		raturn: selected_neighbour: neighbour
-		"""
-		return neighbour_list[random.randint(0, len(neighbour_list) - 1)]
+    def select_random_neighbour(neighbour_list):
+        """
+        Select a random neighbour from neighbours list
+        params: neightbour_list: list of neighbour
+        raturn: selected_neighbour: neighbour
+        """
+        return neighbour_list[random.randint(0, len(neighbour_list) - 1)]
 
-	def choose_current_path(move_cost, best_cost, temperature):
-		"""
-		Selecting current move as best move with probability calculated using Boltzman Distribution
-		params: move_cost: int,int      -> to-be-selected current move cost
-		        best_cost: int,int      -> current best move cost
-		        temperature: int        -> current temperature
-		return: choose current move? boolean
-		"""
-		if (best_cost == None) or ((move_cost[0] <= best_cost[0]) and (move_cost[1] >= best_cost[1])):
-			return True
-		else:
-			probability_0 = min(exp((best_cost[0] - move_cost[0]) / temperature), 1)
-			probability_1 = min(exp((move_cost[1] - best_cost[1]) / temperature), 1)
-			avg_probability = (probability_0 + probability_1) / 2 if (probability_1 != 0) else probability_0
-			return True if (avg_probability > 0.7) else False
+    def choose_current_path(move_cost, best_cost, temperature):
+        """
+        Selecting current move as best move with probability calculated using Boltzman Distribution
+        params: move_cost: int,int      -> to-be-selected current move cost
+                best_cost: int,int      -> current best move cost
+                temperature: int        -> current temperature
+        return: choose current move? boolean
+        """
+        if (best_cost == None) or ((move_cost[0] <= best_cost[0]) and (move_cost[1] >= best_cost[1])):
+            return True
+        else:
+            probability_0 = min(exp((best_cost[0] - move_cost[0]) / temperature), 1)
+            probability_1 = min(exp((move_cost[1] - best_cost[1]) / temperature), 1)
+            avg_probability = (probability_0 + probability_1) / 2 if (probability_1 != 0) else probability_0
+            return True if (avg_probability > 0.7) else False
 
-	def execute_iteration(chessboard, best_cost, temperature):
-		"""
-		Do an iteration of the program using simulated annealing
-		params: chessboard: chessboard
-				best_cost: int, int 	-> current best move cost
-				temperature: int 		-> current temperature
-		"""
-		start_time = time.time()
-		for i in range(100):
+    def execute_iteration(chessboard, best_cost, temperature):
+        """
+        Do an iteration of the program using simulated annealing
+        params: chessboard: chessboard
+                best_cost: int, int     -> current best move cost
+                temperature: int        -> current temperature
+        """
+        start_time = time.time()
+        for _ in range(100):
 
-			selected_piece = chessboard.list[random.randint(0, len(chessboard.list) - 1)]
-			init_x = selected_piece.x
-			init_y = selected_piece.y
+            selected_piece = chessboard.list[random.randint(0, len(chessboard.list) - 1)]
+            init_x = selected_piece.x
+            init_y = selected_piece.y
 
-			neighbours_list = find_neighbour(chessboard, selected_piece)
-			selected_neighbour = select_random_neighbour(neighbours_list)
-			chessboard.move(selected_piece, *selected_neighbour)
+            neighbours_list = find_neighbour(chessboard, selected_piece)
+            selected_neighbour = select_random_neighbour(neighbours_list)
+            chessboard.move(selected_piece, *selected_neighbour)
 
-			selected_cost = chessboard.cost()
-			if (choose_current_path(selected_cost, best_cost, temperature)):
-				best_cost = selected_cost
-			else:
-				chessboard.move(selected_piece, init_x, init_y)
-		end_time = time.time()
+            selected_cost = chessboard.cost()
+            if (choose_current_path(selected_cost, best_cost, temperature)):
+                best_cost = selected_cost
+            else:
+                chessboard.move(selected_piece, init_x, init_y)
+        end_time = time.time()
 
-		print(chr(27) + "[2J")
-		chessboard.print()
-		print(str(round(((end_time - start_time) * 1000), 4)) + ' ms' + ', Cost: ' + str(best_cost) + ', Temperature: ' + str(temperature))
+        print(str(round(((end_time - start_time) * 1000), 4)) + ' ms' + ', Cost: ' + str(best_cost) + ', Temperature: ' + str(temperature), end="\r")
 
-		return copy.deepcopy(best_cost)
+        return copy.deepcopy(best_cost)
 
+    # Main
+    clear()
+    print(TerminalColor.YELLOW + '=' * get_terminal_width())
+    print('-' * int((get_terminal_width() - 31) / 2), end="")
+    print(TerminalColor.BOLD + TerminalColor.DARKCYAN + " SIMULATED ANNEALING ALGORITHM " + TerminalColor.YELLOW, end="")
+    print('-' * int((get_terminal_width() - 31) / 2))
+    print('=' * get_terminal_width() + TerminalColor.END)
+    print()
+    print('Initial temperature : ')
+    init_temp = float(input(TerminalColor.DARKCYAN + '➜' + TerminalColor.END + " "))
 
-	#Main
-	print('\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-	print('\n------------------- SIMULATED ANNEALING ALGORITHM -------------------\n')
-	chessboard.print()
-	print("Initial cost: {}".format(chessboard.cost()))
-	init_temp = float(input("Input initial temperature: "))
-	temp_dec_gradient = float(input("Input temperature decrease gradient: "))
-	best_cost = [999999, 0]
-	curr_temp = init_temp
+    print()
 
-	start_time = time.time()
+    print('Temperature decrease gradient : ')
+    temp_dec_gradient = float(input(TerminalColor.DARKCYAN + '➜' + TerminalColor.END + " "))
+    print()
 
-	iteration = 0
-	while (curr_temp > 0.001):
-		iteration += 1
-		best_cost = execute_iteration(chessboard, best_cost, curr_temp)
-		curr_temp = init_temp - (iteration*temp_dec_gradient)
+    best_cost = [999999, 0]
+    curr_temp = init_temp
 
-	end_time = time.time()
+    start_time = time.time()
 
-	# print result
-	print('\n')
-	print(chr(27) + "[2J")
-	chessboard.print()
-	print('Total trial(s):   {}'.format(iteration * 100))
-	print('\nBest result:')
-	print('  * best cost:    {}'.format(best_cost))
-	print('  * elapsed time: {} ms'.format((end_time - start_time) * 1000))
-	print('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n')
+    iteration = 0
+    while (curr_temp > 0.001):
+        iteration += 1
+        best_cost = execute_iteration(chessboard, best_cost, curr_temp)
+        curr_temp = init_temp - (iteration * temp_dec_gradient)
 
+    end_time = time.time()
+
+    # print result
+    clear()
+    print(TerminalColor.YELLOW + '=' * get_terminal_width())
+    print('-' * int((get_terminal_width() - 34) / 2), end="")
+    print(TerminalColor.BOLD + TerminalColor.DARKCYAN + " SIMULATED ANNEALING: BEST RESULT " + TerminalColor.YELLOW, end="")
+    print('-' * int((get_terminal_width() - 34) / 2))
+    print('=' * get_terminal_width() + TerminalColor.END)
+
+    chessboard.print(True)
+    print(' ' * int((get_terminal_width() - 36) / 2) + '{}===================================={}'.format(TerminalColor.YELLOW, TerminalColor.END))
+    print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Initial temp.     : {:7.2f}    {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, init_temp, TerminalColor.YELLOW, TerminalColor.END))
+    print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Temp. gradient    : {:7.2f}    {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, temp_dec_gradient, TerminalColor.YELLOW, TerminalColor.END))
+    print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Best cost         : {:7s}    {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, str(best_cost), TerminalColor.YELLOW, TerminalColor.END))
+    print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Elapsed time      : {:7.2f} ms {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, (end_time - start_time) * 1000, TerminalColor.YELLOW, TerminalColor.END))
+    print(' ' * int((get_terminal_width() - 36) / 2) + '{}===================================={}'.format(TerminalColor.YELLOW, TerminalColor.END))
+
+    print()
+    print(TerminalColor.YELLOW + '=' * get_terminal_width() + TerminalColor.END)
+
+    input(TerminalColor.BOLD + TerminalColor.ITALIC + TerminalColor.DARKCYAN + "Press Enter to continue...  " + TerminalColor.END)
+    clear()
 
 def genetic_algorithm(chessboard):
     """ Genetic Algorithm for solving N-ything problem
-
     :param chessboard : Initial state of the chessboard
     :param generation : Number of steps before the algorithm stops
     :param mutation_percentage : Percentage of gene mutation
@@ -408,11 +464,28 @@ def genetic_algorithm(chessboard):
 
         return population[best_index]
 
+    # Main
+    clear()
+    print(TerminalColor.YELLOW + '=' * get_terminal_width())
+    print('-' * int((get_terminal_width() - 19) / 2), end="")
+    print(TerminalColor.BOLD + TerminalColor.DARKCYAN + " GENETIC ALGORITHM " + TerminalColor.YELLOW, end="")
+    print('-' * int((get_terminal_width() - 19) / 2))
+    print('=' * get_terminal_width() + TerminalColor.END)
+    print()
+    print('Population size : ')
+    population_size = int(input(TerminalColor.DARKCYAN + '➜' + TerminalColor.END + " "))
 
-    # get population size
-    population_size = int(input("Enter population size : "))
-    generation = int(input("Enter number of generation : "))
-    mutation_percentage = int(input("Enter probability of mutation (0-100) : "))
+    print()
+
+    print('Number of generation : ')
+    generation = int(input(TerminalColor.DARKCYAN + '➜' + TerminalColor.END + " "))
+
+    print()
+
+    print('Probability of mutation : ')
+    mutation_percentage = float(input(TerminalColor.DARKCYAN + '➜' + TerminalColor.END + " "))
+
+    print()
 
     # start program
     start_time = time.time()
@@ -451,13 +524,43 @@ def genetic_algorithm(chessboard):
 
         chessboard.grid[chessboard.list[i].x][chessboard.list[i].y] = chessboard.list[i].color
 
-    # print chessboard
-    chessboard.print()
-    defense, attack = chessboard.cost()
+    elapsed_time = time.time() - start_time
 
-    print("Number of attack : " + str(attack))
-    print("Number of defense : " + str(defense))
+    # print result
+    clear()
+    print(TerminalColor.YELLOW + '=' * get_terminal_width())
+    print('-' * int((get_terminal_width() - 22) / 2), end="")
+    print(TerminalColor.BOLD + TerminalColor.DARKCYAN + " GENETIC: BEST RESULT " + TerminalColor.YELLOW, end="")
+    print('-' * int((get_terminal_width() - 22) / 2))
+    print('=' * get_terminal_width() + TerminalColor.END)
 
-    end_time = time.time() - start_time
-    print("elapsed time : " + str(end_time))
+    chessboard.print(True)
+    print(' ' * int((get_terminal_width() - 36) / 2) + '{}===================================={}'.format(TerminalColor.YELLOW, TerminalColor.END))
+    print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Population size   : {:7d}    {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, population_size, TerminalColor.YELLOW, TerminalColor.END))
+    print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} No. of Generation : {:7d}    {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, generation, TerminalColor.YELLOW, TerminalColor.END))
+    print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Mutation Prob.    : {:7.2f}%   {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, mutation_percentage, TerminalColor.YELLOW, TerminalColor.END))
+    print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Best cost         : {:7s}    {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, str(chessboard.cost()), TerminalColor.YELLOW, TerminalColor.END))
+    print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Elapsed time      : {:7.2f}ms {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, elapsed_time * 1000, TerminalColor.YELLOW, TerminalColor.END))
+    print(' ' * int((get_terminal_width() - 36) / 2) + '{}===================================={}'.format(TerminalColor.YELLOW, TerminalColor.END))
+
+    print()
+    print(TerminalColor.YELLOW + '=' * get_terminal_width() + TerminalColor.END)
+
     input(TerminalColor.BOLD + TerminalColor.ITALIC + TerminalColor.DARKCYAN + "Press Enter to continue...  " + TerminalColor.END)
+    clear()
+
+    © 2018 GitHub, Inc.
+    Terms
+    Privacy
+    Security
+    Status
+    Help
+
+    Contact GitHub
+    Pricing
+    API
+    Training
+    Blog
+    About
+
+Press h to open a hovercard with more details.
