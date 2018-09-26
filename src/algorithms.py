@@ -460,3 +460,4 @@ def genetic_algorithm(chessboard):
 
     end_time = time.time() - start_time
     print("elapsed time : " + str(end_time))
+    input(TerminalColor.BOLD + TerminalColor.ITALIC + TerminalColor.DARKCYAN + "Press Enter to continue...  " + TerminalColor.END)
