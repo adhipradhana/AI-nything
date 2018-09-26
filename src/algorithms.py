@@ -198,9 +198,7 @@ def simulated_annealing(chessboard):
                 best_cost: int, int     -> current best move cost
                 temperature: int        -> current temperature
         """
-        start_time = time.time()
         for _ in range(100):
-
             selected_piece = chessboard.list[random.randint(0, len(chessboard.list) - 1)]
             init_x = selected_piece.x
             init_y = selected_piece.y
@@ -214,11 +212,59 @@ def simulated_annealing(chessboard):
                 best_cost = selected_cost
             else:
                 chessboard.move(selected_piece, init_x, init_y)
-        end_time = time.time()
 
-        print(str(round(((end_time - start_time) * 1000), 4)) + ' ms' + ', Cost: ' + str(best_cost) + ', Temperature: ' + str(temperature), end="\r")
-
+            print('Cost: ' + str(best_cost) + ', Temperature: ' + str(temperature), end="\r")
         return copy.deepcopy(best_cost)
+
+    def update_best_result(new_cost, best_result):
+        """ 
+        Update the value of best result
+        params 	new_cost 		-> selected new best cost
+        		best_result:	-> current best result 	
+        return 	the best result
+        """
+        new_result = {
+            'best_cost': new_cost,
+            'chessboard': copy.deepcopy(chessboard)
+        }
+
+        if len(best_result) == 0:
+            return copy.deepcopy(new_result)
+        elif (best_result['best_cost'][0] > new_result['best_cost'][0] and best_result['best_cost'][1] <= new_result['best_cost'][1]) or (best_result['best_cost'][0] >= new_result['best_cost'][0] and best_result['best_cost'][1] < new_result['best_cost'][1]):
+            return copy.deepcopy(new_result)
+        else:
+            return best_result
+
+    def execute_simulated_annealing(best_result, restart_num, init_temp, temp_dec_gradient):
+        """
+        Execute simulated annealing algorithm
+        params	best_result         -> current best result
+                restart_num			-> number of restarts
+        		init_temp			-> initial temperature
+        		temp_dec_gradient	-> temperature decrease gradient
+        return 	best_cost
+
+        """
+        for i in range(restart_num):
+            chessboard.randomize()
+
+            selected_cost = chessboard.cost()
+            curr_temp = init_temp
+            iteration = 0
+
+            start_time = time.time()
+
+            while (curr_temp > 0.001):
+                iteration += 1
+                selected_cost = execute_iteration(chessboard, selected_cost, curr_temp)
+                curr_temp = init_temp - (iteration * temp_dec_gradient)
+
+            end_time = time.time()
+
+            print(' ' * 40 + 'Restart num: ' + str(i + 1) + ', ' + str(round(((end_time - start_time) * 1000), 4)) + ' ms' + ', Cost: ' + str(selected_cost), end="\r")
+
+            best_result = update_best_result(selected_cost, best_result)
+        return selected_cost, best_result
 
     # Main
     clear()
@@ -228,25 +274,27 @@ def simulated_annealing(chessboard):
     print('-' * int((get_terminal_width() - 31) / 2))
     print('=' * get_terminal_width() + TerminalColor.END)
     print()
+    print('Number of restarts : ')
+    restart_num = int(input(TerminalColor.DARKCYAN + '➜' + TerminalColor.END + " "))
+    print()
+
     print('Initial temperature : ')
     init_temp = float(input(TerminalColor.DARKCYAN + '➜' + TerminalColor.END + " "))
-
     print()
 
     print('Temperature decrease gradient : ')
     temp_dec_gradient = float(input(TerminalColor.DARKCYAN + '➜' + TerminalColor.END + " "))
     print()
 
-    best_cost = [999999, 0]
-    curr_temp = init_temp
+    selected_cost = []
+    best_result = {
+    	'best_cost': chessboard.cost(),
+    	'chessboard': copy.deepcopy(chessboard)
+    }
 
     start_time = time.time()
 
-    iteration = 0
-    while (curr_temp > 0.001):
-        iteration += 1
-        best_cost = execute_iteration(chessboard, best_cost, curr_temp)
-        curr_temp = init_temp - (iteration * temp_dec_gradient)
+    selected_cost, best_result = execute_simulated_annealing(best_result, restart_num, init_temp, temp_dec_gradient)
 
     end_time = time.time()
 
@@ -258,11 +306,13 @@ def simulated_annealing(chessboard):
     print('-' * int((get_terminal_width() - 34) / 2))
     print('=' * get_terminal_width() + TerminalColor.END)
 
-    chessboard.print(True)
+    best_result['chessboard'].print(True)
     print(' ' * int((get_terminal_width() - 36) / 2) + '{}===================================={}'.format(TerminalColor.YELLOW, TerminalColor.END))
+    print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Restart number(s) : {:7.2f}    {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, restart_num, TerminalColor.YELLOW, TerminalColor.END))
     print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Initial temp.     : {:7.2f}    {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, init_temp, TerminalColor.YELLOW, TerminalColor.END))
     print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Temp. gradient    : {:7.2f}    {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, temp_dec_gradient, TerminalColor.YELLOW, TerminalColor.END))
-    print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Best cost         : {:7s}    {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, str(best_cost), TerminalColor.YELLOW, TerminalColor.END))
+    print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Best cost         : {:7s}    {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, str(best_result['best_cost']), TerminalColor.YELLOW, TerminalColor.END))
+    print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Final cost        : {:7s}    {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, str(selected_cost), TerminalColor.YELLOW, TerminalColor.END))
     print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Elapsed time      : {:7.2f} ms {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, (end_time - start_time) * 1000, TerminalColor.YELLOW, TerminalColor.END))
     print(' ' * int((get_terminal_width() - 36) / 2) + '{}===================================={}'.format(TerminalColor.YELLOW, TerminalColor.END))
 
