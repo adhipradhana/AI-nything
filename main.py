@@ -9,10 +9,10 @@ from src.algorithms import genetic_algorithm
 # f = ChessBoard()
 # f.init_map("input.txt")
 
-exit = False
+ex = False
 init = False
 c = ChessBoard()
-while not exit:
+while not ex:
     print("Welcome to N-anything chess solver!!")
     print("Menu choice :")
     print("1. Init Chessboard")
@@ -43,19 +43,4 @@ while not exit:
         if init:
             c.print()
     elif (choose == "6"):
-        exit = True
-# simulated_annealing(f)
-# hill_climbing(f)
-# genetic_algorithm(f)
-# f.print()
-# f.move(f.list[1], 0, 0)
-# f.print()
-# f.move(f.list[0], 7, 7)
-# f.print()
-# f.move(f.list[0], 0, 0)
-# f.print()
-# print(f.cost())
-# f.create_rook(Color.WHITE)
-# f.create_bishop(Color.BLACK)
-# f.print()
-# f.show_list()
+        ex = True
