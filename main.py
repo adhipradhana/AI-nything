@@ -130,6 +130,7 @@ while True:
                     init = True
                 except:
                     last_msg = 1
+                    raise
                 os.system('setterm -cursor off')
                 os.system('clear')
             elif option == 1:
@@ -165,5 +166,6 @@ while True:
         else:
             os.system('clear')   
     except:
+        raise
         os.system('setterm -cursor on')
         exit()
