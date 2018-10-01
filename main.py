@@ -1,11 +1,8 @@
-from src.chessboard import ChessBoard
-from src.chesspiece import Color
-from src.util import parser
-from src.algorithms import simulated_annealing
-from src.algorithms import hill_climbing
-from src.algorithms import genetic_algorithm
+from src.chessboard import ChessBoard, Color
+from src.algorithms import hill_climbing, simulated_annealing, genetic_algorithm
+from src.util import TerminalColor, get_terminal_width, clear, parser
+
 import sys, termios, tty, os, time
-from src.util import TerminalColor, get_terminal_width, clear
 import datetime
 
 magnus_image = """
@@ -44,15 +41,15 @@ magnus_name = """
 """
 
 logo = """
-          _____                  _   _     _             
-    /\   |_   _|                | | | |   (_)            
-   /  \    | |______ _ __  _   _| |_| |__  _ _ __   __ _ 
-  / /\ \   | |______| '_ \| | | | __| '_ \| | '_ \ / _` |
- / ____ \ _| |_     | | | | |_| | |_| | | | | | | | (_| |
-/_/    \_\_____|    |_| |_|\__, |\__|_| |_|_|_| |_|\__, |
-                            __/ |                   __/ |
-                           |___/                   |___/ 
-"""
+{0}          _____                  _   _     _             
+{0}    /\   |_   _|                | | | |   (_)            
+{0}   /  \    | |______ _ __  _   _| |_| |__  _ _ __   __ _ 
+{0}  / /\ \   | |______| '_ \| | | | __| '_ \| | '_ \ / _` |
+{0} / ____ \ _| |_     | | | | |_| | |_| | | | | | | | (_| |
+{0}/_/    \_\_____|    |_| |_|\__, |\__|_| |_|_|_| |_|\__, |
+{0}                            __/ |                   __/ |
+{0}                           |___/                   |___/ 
+""".format("")
 
  
 message = ["Load file success", "No files found", "Print chess success"]
