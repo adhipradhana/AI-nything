@@ -20,10 +20,6 @@ $ python main.py
 
 and enjoy the game.
 
-## Built With
-
-* [GNU GCC](https://gcc.cnu.org) - Compiler used
-
 ## Authors
 
 * **Abram Perdanaputra Situmorang** - *Initial work* - [abrampers](https://github.com/abrampers)
