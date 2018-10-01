@@ -32,7 +32,5 @@ and enjoy the game.
 https://docs.google.com/document/d/1fzwXxGnTdkkiVfkSqpB-gZqZC-Bhnql6hr_OPB0134A/edit?usp=sharing
 
 ## Acknowledgments
-
-* Battle of Wesnoth game maker - [Wesnoth](https://wesnoth.org)
 * Mrs. Masayu Leylia Khodra (Lecturer)
 * Magnus Carlsen
