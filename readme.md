@@ -32,6 +32,9 @@ and enjoy the game.
 * **M. Sulthan Adhipradhana** - *Initial work* - [adhipradhana](https://github.com/adhipradhana)
 * **Yusuf Rahmat Pratama** - *Initial work* - [yusufrahmatp](https://github.com/yusufrahmatp)
 
+## Report
+https://docs.google.com/document/d/1fzwXxGnTdkkiVfkSqpB-gZqZC-Bhnql6hr_OPB0134A/edit?usp=sharing
+
 ## Acknowledgments
 
 * Battle of Wesnoth game maker - [Wesnoth](https://wesnoth.org)

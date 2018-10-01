@@ -330,7 +330,6 @@ def genetic_algorithm(chessboard):
     # I.S. : Random chessboard
     # F.S. : Chessboard at global maximum/minimum
     """
-
     def create_population(population_size):
         """ Create random chromosome from the chessboard """
 
@@ -339,89 +338,103 @@ def genetic_algorithm(chessboard):
 
         for _ in range (population_size) :
             chromosome = []
-
             for _ in range(len(chessboard.list)):
                 gene = (random.randint(0,7), random.randint(0,7))
-
                 while gene in chromosome:
                     gene = (random.randint(0,7), random.randint(0,7))
-
                 chromosome.append(gene)
 
             population.append(chromosome)
 
         return population
 
-    def fitness(chromosome):
+    def fitness(chromosome, chessboard):
         """
         Fitness function is for selecting chromosome to generate new chromosome
-        maximum_defense = Sum of Combination(number of chestpiece, 2) by color
-        defense = number of non attacking chestpiece with same color
-        attack = number of attackung chestpiece with same color
+        maximum_defense = Sum of Combination(number of chesspiece, 2) by color
+        defense = number of non attacking chesspiece with same color
+        attack = number of attackung chesspiece with same color
         Returns fitness function
         """
-        maximum_defense = (white_count * (white_count - 1)) + (black_count * (black_count - 1))
+        nonlocal best_cost, best_chessboard, maximum_defense
 
-        for i in range (chestpiece_length):
+        for i in range(chesspiece_length):
             chessboard.grid[chessboard.list[i].x][chessboard.list[i].y] = None
 
+        for i in range(chesspiece_length):
             chessboard.list[i].x = chromosome[i][0]
             chessboard.list[i].y = chromosome[i][1]
 
             chessboard.grid[chessboard.list[i].x][chessboard.list[i].y] = chessboard.list[i].color
 
         defense, attack = chessboard.cost()
+        score = (maximum_defense - defense + attack)
 
-        return (maximum_defense - defense + attack) ** 2
+        if best_cost < score:
+            best_cost = score
+            best_chessboard = copy.deepcopy(chessboard)
 
-    def fitness_percentage(population):
+        return score ** 2
+
+    def fitness_percentage(population, chessboard):
         """
         Returns list of fitness percentage of chromosome
         """
         fitness_scores = []
         for chromosome in population:
-            score = fitness(chromosome)
+            score = fitness(chromosome, chessboard)
             fitness_scores.append(score)
 
         total_scores = sum(fitness_scores)
 
         percentages = []
         # get 3 largest element
-        for score in fitness_scores:
-            percentage = score / total_scores
+        for i in range(population_size):
+            if i == 0:
+                percentage = score / total_scores
+            else:
+                percentage = (score / total_scores) + percentages[i - 1]
             percentages.append(percentage)
+
+        percentages[-1] = 1.0
 
         return percentages
 
-    def select_chromosome(population_index, percentages):
+    def select_chromosome(percentages):
         """
         Selecting chromosome for crossover
         """
-        first_index = np.random.choice(population_index, p = percentages)
-        second_index = np.random.choice(population_index, p = percentages)
+        first_index = select_distribution(percentages)
+        second_index = select_distribution(percentages)
 
         while second_index == first_index:
-            second_index = np.random.choice(population_index, p = percentages)
+            second_index = select_distribution(percentages)
 
         return (first_index, second_index)
+
+    def select_distribution(percentages):
+        x = random.uniform(0.0, 1.0)
+        for i in range(population_size):
+            if x < percentages[i]:
+                return i
 
     def crossbreed(chromosome_1, chromosome_2):
         """
         Crossbreed chromosome to create new chromosome
         """
-        # choose pivot point (for this case the middle)
-        pivot = random.randint(0, chestpiece_length - 1)
+        nonlocal population_size
 
-        # create breed from first largest and second largest
+        pivot = random.randint(0,7)
+
         sub_chromosome_1 = chromosome_1[0:pivot]
-        sub_chromosome_2 = chromosome_2[pivot:chestpiece_length]
+        sub_chromosome_2 = chromosome_2[pivot:population_size]
 
         new_chromosome = sub_chromosome_1[:]
         for gene in sub_chromosome_2:
             while gene in new_chromosome:
                 gene = (random.randint(0,7), random.randint(0,7))
             new_chromosome.append(gene)
-
+        
         return new_chromosome
 
 
@@ -442,29 +455,27 @@ def genetic_algorithm(chessboard):
 
             chromosome[index] = (x,y)
 
-    def create_generation(population, population_index, population_size, mutation_percentage):
+    def create_generation(population, population_size, mutation_percentage, chessboard):
         """
         One iteration of population crossbreed
         """
         # get percentage of population
-        percentages = fitness_percentage(population)
+        percentages = fitness_percentage(population, chessboard)
 
         new_population = []
         # crossbreed as many as population size
         for _ in range(population_size):
             # select chromosome for crossbreed
-            chromosome_index_1, chromosome_index_2 = select_chromosome(population_index, percentages)
+            chromosome_index_1, chromosome_index_2 = select_chromosome(percentages)
 
             chromosome_1 = population[chromosome_index_1]
             chromosome_2 = population[chromosome_index_2]
 
             new_chromosome = crossbreed(chromosome_1, chromosome_2)
+            mutation(new_chromosome, mutation_percentage)
             new_population.append(new_chromosome)
 
-        mutation_index = random.randint(0, population_size - 1)
-        mutation(new_population[mutation_index], mutation_percentage)
-
-        population = new_population
+        return new_population
 
     def select_best_result(population):
         """
@@ -472,7 +483,7 @@ def genetic_algorithm(chessboard):
         """
         fitness_scores = []
         for chromosome in population:
-            score = fitness(chromosome)
+            score = fitness(chromosome, chessboard)
             fitness_scores.append(score)
 
         best_index = fitness_scores.index(max(fitness_scores))
@@ -505,11 +516,12 @@ def genetic_algorithm(chessboard):
     # start program
     start_time = time.time()
 
-    # index of population
-    population_index = list(range(0, population_size))
-
     # save list length
-    chestpiece_length = len(chessboard.list)
+    chesspiece_length = len(chessboard.list)
+
+    # best result
+    best_cost = 0
+    best_chessboard = None
 
     # get white and black count
     white_count = 0
@@ -517,27 +529,21 @@ def genetic_algorithm(chessboard):
         if chesspice.color == Color.WHITE: # color white
             white_count += 1
 
-    black_count = chestpiece_length - white_count
+    black_count = chesspiece_length - white_count
+
+    # get maximum_defense
+    maximum_defense = (white_count * (white_count - 1)) + (black_count * (black_count - 1))
 
     # create iniitial population population
     population = create_population(population_size)
 
     # iteration algorithm
     for i in range (generation) :
-        print("iteration " + str(i), end="\r")
-        create_generation(population, population_index, population_size, mutation_percentage)
+        print("Generation " + str(i), end="\r")
+        population = create_generation(population, population_size, mutation_percentage, chessboard)
 
-    # select best chromosome
-    chromosome = select_best_result(population)
-
-    # assign to chessboard
-    for i in range (chestpiece_length):
-        chessboard.grid[chessboard.list[i].x][chessboard.list[i].y] = None
-
-        chessboard.list[i].x = chromosome[i][0]
-        chessboard.list[i].y = chromosome[i][1]
-
-        chessboard.grid[chessboard.list[i].x][chessboard.list[i].y] = chessboard.list[i].color
+    # best result
+    best_result = best_chessboard.cost()
 
     elapsed_time = time.time() - start_time
 
@@ -549,12 +555,12 @@ def genetic_algorithm(chessboard):
     print('-' * int((get_terminal_width() - 22) / 2))
     print('=' * get_terminal_width() + TerminalColor.END)
 
-    chessboard.print(True)
+    best_chessboard.print(True)
     print(' ' * int((get_terminal_width() - 36) / 2) + '{}===================================={}'.format(TerminalColor.YELLOW, TerminalColor.END))
     print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Population size   : {:7d}    {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, population_size, TerminalColor.YELLOW, TerminalColor.END))
     print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} No. of Generation : {:7d}    {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, generation, TerminalColor.YELLOW, TerminalColor.END))
     print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Mutation Prob.    : {:7.2f}%   {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, mutation_percentage, TerminalColor.YELLOW, TerminalColor.END))
-    print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Best cost         : {:7s}    {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, str(chessboard.cost()), TerminalColor.YELLOW, TerminalColor.END))
+    print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Best cost         : {:7s}    {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, str(best_result), TerminalColor.YELLOW, TerminalColor.END))
     print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Elapsed time      : {:7.2f}ms {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, elapsed_time * 1000, TerminalColor.YELLOW, TerminalColor.END))
     print(' ' * int((get_terminal_width() - 36) / 2) + '{}===================================={}'.format(TerminalColor.YELLOW, TerminalColor.END))
 
