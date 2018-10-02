@@ -9,6 +9,7 @@ The attacking system on this problem follows the conventional chess rules.
 ## Getting Started
 
 First, put the configuration file in the project directory. 
+
 ex: `input.txt`
 ```
 WHITE KNIGHT <number of white knight>
