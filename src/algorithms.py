@@ -312,7 +312,6 @@ def simulated_annealing(chessboard):
     print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Initial temp.     : {:7.2f}    {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, init_temp, TerminalColor.YELLOW, TerminalColor.END))
     print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Temp. gradient    : {:7.2f}    {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, temp_dec_gradient, TerminalColor.YELLOW, TerminalColor.END))
     print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Best cost         : {:7s}    {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, str(best_result['best_cost']), TerminalColor.YELLOW, TerminalColor.END))
-    print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Final cost        : {:7s}    {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, str(selected_cost), TerminalColor.YELLOW, TerminalColor.END))
     print(' ' * int((get_terminal_width() - 36) / 2) + '{}| {}\u2022{} Elapsed time      : {:7.2f} ms {}|{}'.format(TerminalColor.YELLOW, TerminalColor.BLUE, TerminalColor.CYAN, (end_time - start_time) * 1000, TerminalColor.YELLOW, TerminalColor.END))
     print(' ' * int((get_terminal_width() - 36) / 2) + '{}===================================={}'.format(TerminalColor.YELLOW, TerminalColor.END))
 

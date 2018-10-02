@@ -3,7 +3,7 @@ import os
 
 from .chesspiece import Rook, Bishop, Queen, Knight, Color, PieceType, index_valid
 from .chessboard_error import ChessBoardFullError, ChessBoardPositionError
-from .util import parser
+from .util import parser, get_terminal_width
 
 rows, columns = os.popen('stty size', 'r').read().split()
 rows, columns = int(rows), int(columns)
@@ -20,6 +20,8 @@ class ChessBoard:
         self.print()
 
     def init_map(self, filename):
+        self.grid = [[None for j in range(8)] for i in range(8)]
+        self.list = []
         pieces = parser(filename)
         for piece in pieces:
             if piece[1] == 'KNIGHT':
@@ -160,7 +162,7 @@ class ChessBoard:
         print()
 
         if centered:
-            print(' ' * int((columns - 28) / 2), end="")
+            print(' ' * int((get_terminal_width() - 28) / 2), end="")
 
         print("   ", end="")
         for c in range(ord('a'), ord('h') + 1):
@@ -169,7 +171,7 @@ class ChessBoard:
 
         for i in range(7, -1, -1):
             if centered:
-                print(' ' * int((columns - 28) / 2), end="")
+                print(' ' * int((get_terminal_width() - 28) / 2), end="")
 
             print(" {} ".format(i + 1), end="")
             for j in range(8):
@@ -188,7 +190,7 @@ class ChessBoard:
             print(" {} ".format(i + 1))
 
         if centered:
-            print(' ' * int((columns - 28) / 2), end="")
+            print(' ' * int((get_terminal_width() - 28) / 2), end="")
 
         print("   ", end="")
         for c in range(ord('a'), ord('h') + 1):

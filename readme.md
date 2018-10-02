@@ -8,7 +8,19 @@ The attacking system on this problem follows the conventional chess rules.
 
 ## Getting Started
 
-These instructions will tell you how to compile and play the game.
+First, put the configuration file in the project directory. 
+ex: `input.txt`
+```
+WHITE KNIGHT <number of white knight>
+WHITE BISHOP <number of white bishop>
+WHITE ROOK <number of white rook>
+WHITE QUEEN <number of white queen>
+BLACK KNIGHT <number of black knight>
+BLACK BISHOP <number of black bishop>
+BLACK ROOK <number of black rook>
+BLACK QUEEN <number of black queen>
+```
+
 
 ## Running the game
 
@@ -18,7 +30,7 @@ To run the game, simply
 $ python main.py
 ```
 
-and enjoy the game.
+and just follow the instructions.
 
 ## Authors
 
