@@ -56,7 +56,6 @@ message = ["Load file success", "No files found", "Print chess success"]
 
 options = ["Input File", "Hill Climbing", "Simulated Annealing", "Genetic Algorithm", "Print Chessboard", "Exit"]
 option = 0
-os.system('setterm -cursor off')
 os.system('clear')
 
 c = ChessBoard()
@@ -110,7 +109,6 @@ while True:
             if option - 1 >= 0:
                 option -=1
         elif (char == "p"):
-            os.system('setterm -cursor on')
             print("Stop!")
             exit(0)
         elif (ord(char) == 13):
@@ -118,7 +116,6 @@ while True:
             os.system('clear')
             print_menu()
             if option == 0:
-                os.system('setterm -cursor on')
                 try:
                     print("File name : ")
                     filename = input(TerminalColor.DARKCYAN + '➜' + TerminalColor.END + " ")
@@ -128,28 +125,21 @@ while True:
                 except:
                     last_msg = 1
                     raise
-                os.system('setterm -cursor off')
                 os.system('clear')
             elif option == 1:
                 if init:
-                    os.system('setterm -cursor on')
                     hill_climbing(c)
                     print_chess = False
-                    os.system('setterm -cursor off')
                 os.system('clear')
             elif option == 2:
                 if init:
-                    os.system('setterm -cursor on')
                     simulated_annealing(c)
                     print_chess = False
-                    os.system('setterm -cursor off')
                 os.system('clear')
             elif option == 3:
                 if init:
-                    os.system('setterm -cursor on')
                     genetic_algorithm(c)
                     print_chess = False
-                    os.system('setterm -cursor off')
                 os.system('clear')
             elif option == 4:
                 os.system('clear')
@@ -158,11 +148,9 @@ while True:
                     last_msg = 2
             elif option == 5:
                 print("Thank you!!")
-                os.system('setterm -cursor on')
                 exit()     
         else:
             os.system('clear')   
     except:
         raise
-        os.system('setterm -cursor on')
         exit()
